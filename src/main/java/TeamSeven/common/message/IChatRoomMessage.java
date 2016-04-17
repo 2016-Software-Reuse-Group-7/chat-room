@@ -1,4 +1,4 @@
-package TeamSeven.common;
+package TeamSeven.common.message;
 
 import java.io.Serializable;
 
