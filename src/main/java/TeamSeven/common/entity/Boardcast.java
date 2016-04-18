@@ -1,9 +1,11 @@
 package TeamSeven.common.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by joshoy on 16/4/18.
  */
-public class Boardcast {
+public class Boardcast implements Serializable {
 
     String content;   // 服务端广播内容
     String sign;      // 服务端签名, 用于验证

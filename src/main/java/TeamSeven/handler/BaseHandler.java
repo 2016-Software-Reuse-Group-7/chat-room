@@ -1,7 +1,5 @@
 package TeamSeven.handler;
 
-import TeamSeven.common.exception.ChatRoomUndefinedMessageTypeException;
-import TeamSeven.common.message.ChatRoomBaseMessage;
 import org.java_websocket.WebSocket;
 
 /**

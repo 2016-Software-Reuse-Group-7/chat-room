@@ -1,6 +1,6 @@
 package TeamSeven.handler.client.ui;
 
-import TeamSeven.common.message.client.ChatRoomClientChatMessage;
+import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.handler.BaseHandler;
 import org.java_websocket.WebSocket;
 
@@ -9,9 +9,9 @@ import org.java_websocket.WebSocket;
  */
 public class ClientChatHandler extends BaseHandler {
 
-    private ChatRoomClientChatMessage msg;
+    private ClientChatMessage msg;
 
-    public ClientChatHandler(ChatRoomClientChatMessage msg, WebSocket conn, Object applier) {
+    public ClientChatHandler(ClientChatMessage msg, WebSocket conn, Object applier) {
         super(conn);
         this.msg = msg;
     }

@@ -1,7 +1,9 @@
 package TeamSeven.server.socket;
 
-import TeamSeven.common.message.ChatRoomBaseMessage;
+import TeamSeven.common.entity.Session;
+import TeamSeven.common.message.BaseMessage;
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
+import TeamSeven.server.session.SessionManager;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 
@@ -17,34 +19,40 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     public ChatRoomServerSocketImpl() throws UnknownHostException {
     }
 
-    public ChatRoomServerSocketImpl(int port, ConsoleServerSideMessageDispatcher dispatcher) throws UnknownHostException {
-        super(port, dispatcher);
+    public ChatRoomServerSocketImpl(int port,
+                                    ConsoleServerSideMessageDispatcher dispatcher,
+                                    SessionManager sessionManager) throws UnknownHostException {
+        super(port, dispatcher, sessionManager);
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
-        // TODO: Handle client starting a connection
+        this.sessionManager.addSession(new Session(conn));
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean closeByRemote) {
-        // TODO: Handle close
+        this.sessionManager.removeSession(new Session(conn));
     }
 
+    /**
+     * @param messageStr:  收到的消息
+     * @param conn: 发送该消息的客户端连接
+     */
     @Override
     public void onMessage(WebSocket conn, String messageStr) {
-        ChatRoomBaseMessage msg;
+        BaseMessage msg;
         // 当一条被序列化的消息到达后
         try {
-            msg = (ChatRoomBaseMessage) cs.deserializeStringifyObject(messageStr);
+            msg = (BaseMessage) cs.deserializeStringifyObject(messageStr);
             // 交给dispatcher处理
-            dispatcher.dispatch(msg, conn, this);
+            dispatcher.dispatch(msg, conn);
         }
         catch (IOException err) {
             System.err.println("[!!!Exception!!!]: Received message IOException.");
         }
         catch (ClassNotFoundException err) {
-            System.err.println("[!!!Exception!!!]: Received message cannot transfer into ChatRoomBaseMessage.");
+            System.err.println("[!!!Exception!!!]: Received message cannot transfer into BaseMessage.");
         } finally {
             // Do nothing, just go on.
         }
@@ -52,13 +60,8 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
-
+        // TODO: error handle
     }
-
-    /**
-     * @param msg:  收到的消息
-     * @param conn: 发送该消息的客户端连接
-     */
 
 
 }

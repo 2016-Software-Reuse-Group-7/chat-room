@@ -1,9 +1,11 @@
 package TeamSeven.common.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by joshoy on 16/4/18.
  */
-public final class Account {
+public final class Account implements Serializable {
 
     private String userId;     // 用户ID
     private String password;   // 密码
@@ -24,5 +26,24 @@ public final class Account {
 
     public String getPassword() {
         return this.password;
+    }
+
+    @Override
+    public int hashCode() {
+        return (this.userId.hashCode() + "::" + this.password.hashCode()).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( !(obj instanceof Account) ) {
+            return false;
+        }
+        Account o = (Account) obj;
+        if ( this.userId.equals(o.getUserId()) && this.password.equals(o.getPassword()) ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -62,7 +62,7 @@ public class RSACoder extends AsymmertricCoder {
     }
 
     @Override
-    protected byte[] encryptWithPublicKey(byte[] srcBytes)
+    public byte[] encryptWithPublicKey(byte[] srcBytes)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         RSAPublicKey pk = (RSAPublicKey)this.getPublicKey();
         Cipher cipher = Cipher.getInstance("RSA");
@@ -72,7 +72,7 @@ public class RSACoder extends AsymmertricCoder {
     }
 
     @Override
-    protected byte[] decryptWithPublicKey(byte[] srcBytes)
+    public byte[] decryptWithPublicKey(byte[] srcBytes)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         RSAPublicKey pk = (RSAPublicKey)this.getPublicKey();
         Cipher cipher = Cipher.getInstance("RSA");
@@ -82,7 +82,7 @@ public class RSACoder extends AsymmertricCoder {
     }
 
     @Override
-    protected byte[] encryptWithPrivateKey(byte[] srcBytes)
+    public byte[] encryptWithPrivateKey(byte[] srcBytes)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         RSAPrivateKey pk = (RSAPrivateKey)this.getPrivateKey();
         Cipher cipher = Cipher.getInstance("RSA");
@@ -92,7 +92,7 @@ public class RSACoder extends AsymmertricCoder {
     }
 
     @Override
-    protected byte[] decryptWithPrivateKey(byte[] srcBytes)
+    public byte[] decryptWithPrivateKey(byte[] srcBytes)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         RSAPrivateKey pk = (RSAPrivateKey)this.getPrivateKey();
         Cipher cipher = Cipher.getInstance("RSA");

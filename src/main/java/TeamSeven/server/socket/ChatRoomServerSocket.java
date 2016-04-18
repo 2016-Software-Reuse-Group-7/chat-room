@@ -2,6 +2,7 @@ package TeamSeven.server.socket;
 
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
+import TeamSeven.server.session.SessionManager;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 import org.java_websocket.WebSocket;
@@ -22,14 +23,16 @@ public abstract class ChatRoomServerSocket extends WebSocketServer {
     protected int port;
     ChatRoomSerializer cs;
     MessageDispatcher dispatcher;
+    SessionManager sessionManager;
 
     public ChatRoomServerSocket() throws UnknownHostException {
     }
 
-    public ChatRoomServerSocket(int port, MessageDispatcher dispatcher) throws UnknownHostException {
+    public ChatRoomServerSocket(int port, MessageDispatcher dispatcher, SessionManager sessionManager) throws UnknownHostException {
         super(new InetSocketAddress(port));
         this.port = port;
         this.dispatcher = dispatcher;
+        this.sessionManager = sessionManager;
         cs = new ChatRoomSerializerImpl();
     }
 

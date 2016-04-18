@@ -20,7 +20,7 @@ public abstract class AsymmertricCoder {
     public abstract PublicKey getPublicKey();
 
     /* 非对称公钥加密 */
-    protected abstract byte[] encryptWithPublicKey(byte[] srcBytes)
+    public abstract byte[] encryptWithPublicKey(byte[] srcBytes)
             throws NoSuchAlgorithmException,
             NoSuchPaddingException,
             InvalidKeyException,
@@ -28,7 +28,7 @@ public abstract class AsymmertricCoder {
             BadPaddingException;
 
     /* 非对称公钥解密 */
-    protected abstract byte[] decryptWithPublicKey(byte[] srcBytes)
+    public abstract byte[] decryptWithPublicKey(byte[] srcBytes)
             throws NoSuchAlgorithmException,
             NoSuchPaddingException,
             InvalidKeyException,
@@ -36,7 +36,7 @@ public abstract class AsymmertricCoder {
             BadPaddingException;
 
     /* 非对称私钥加密 */
-    protected abstract byte[] encryptWithPrivateKey(byte[] srcBytes)
+    public abstract byte[] encryptWithPrivateKey(byte[] srcBytes)
             throws NoSuchAlgorithmException,
             NoSuchPaddingException,
             InvalidKeyException,
@@ -44,7 +44,7 @@ public abstract class AsymmertricCoder {
             BadPaddingException;
 
     /* 非对称私钥解密 */
-    protected abstract byte[] decryptWithPrivateKey(byte[] srcBytes)
+    public abstract byte[] decryptWithPrivateKey(byte[] srcBytes)
             throws NoSuchAlgorithmException,
             NoSuchPaddingException,
             InvalidKeyException,

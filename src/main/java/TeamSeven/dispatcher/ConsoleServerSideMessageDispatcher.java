@@ -1,7 +1,7 @@
 package TeamSeven.dispatcher;
 
-import TeamSeven.common.message.ChatRoomBaseMessage;
-import TeamSeven.common.message.client.ChatRoomClientChatMessage;
+import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.handler.client.console.ClientChatHandler;
 import org.java_websocket.WebSocket;
 
@@ -15,10 +15,10 @@ public class ConsoleServerSideMessageDispatcher extends MessageDispatcher {
     }
 
     @Override
-    public void dispatch(ChatRoomBaseMessage message, WebSocket conn)  {
+    public void dispatch(BaseMessage message, WebSocket conn)  {
         switch (message.getType()) {
             case CLIENT_CHAT:
-                ChatRoomClientChatMessage transMsg = (ChatRoomClientChatMessage) message;
+                ClientChatMessage transMsg = (ClientChatMessage) message;
                 handler = new ClientChatHandler(transMsg, conn, applier);
                 break;
             default:

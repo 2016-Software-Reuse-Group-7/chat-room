@@ -1,6 +1,6 @@
 package TeamSeven.dispatcher;
 
-import TeamSeven.common.message.ChatRoomBaseMessage;
+import TeamSeven.common.message.BaseMessage;
 import TeamSeven.handler.BaseHandler;
 import org.java_websocket.WebSocket;
 
@@ -16,5 +16,5 @@ public abstract class MessageDispatcher {
         this.applier = applier;
     }
 
-    public abstract void dispatch(ChatRoomBaseMessage message, WebSocket connFrom);
+    public abstract void dispatch(BaseMessage message, WebSocket connFrom);
 }

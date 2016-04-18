@@ -1,12 +1,12 @@
 package TeamSeven.common.message.server;
 
 import TeamSeven.common.enumerate.TransMessageTypeEnum;
-import TeamSeven.common.message.ChatRoomBaseMessage;
+import TeamSeven.common.message.BaseMessage;
 
 /**
  * Created by joshoy on 16/4/18.
  */
-public class ChatRoomServerBoardcastMessage extends ChatRoomBaseMessage {
+public class ServerBoardcastMessage extends BaseMessage {
 
     public String getContent() {
         return content;
@@ -14,7 +14,7 @@ public class ChatRoomServerBoardcastMessage extends ChatRoomBaseMessage {
 
     protected String content;
 
-    public ChatRoomServerBoardcastMessage(String content) {
+    public ServerBoardcastMessage(String content) {
         this.content = content;
     }
 
