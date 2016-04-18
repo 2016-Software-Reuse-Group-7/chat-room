@@ -2,6 +2,7 @@ package TeamSeven.util.serialize;
 
 import org.nustaq.serialization.FSTConfiguration;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Base64;
 
@@ -18,22 +19,22 @@ public class ChatRoomSerializerImpl implements ChatRoomSerializer {
         }
     }
 
-    public byte[] serializeObject(Serializable obj) {
+    public byte[] serializeObject(Serializable obj) throws IOException {
         byte[] bArray = conf.asByteArray(obj);
         byte[] ret = Base64.getEncoder().encode(bArray);
         return ret;
     }
 
-    public String serializeObjectAndStringify(Serializable obj) {
+    public String serializeObjectAndStringify(Serializable obj) throws IOException {
         return new String(this.serializeObject(obj));
     }
 
-    public Object deserializeObject(byte[] buffer) {
+    public Object deserializeObject(byte[] buffer)  throws IOException, ClassNotFoundException  {
         byte[] data = Base64.getDecoder().decode(buffer);
         return conf.asObject(data);
     }
 
-    public Object deserializeStringifyObject(String buffer) {
+    public Object deserializeStringifyObject(String buffer) throws IOException, ClassNotFoundException {
         return this.deserializeObject(buffer.getBytes());
     }
 }
