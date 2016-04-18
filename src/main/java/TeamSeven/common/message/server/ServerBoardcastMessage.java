@@ -1,5 +1,6 @@
 package TeamSeven.common.message.server;
 
+import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.enumerate.TransMessageTypeEnum;
 import TeamSeven.common.message.BaseMessage;
 
@@ -13,9 +14,11 @@ public class ServerBoardcastMessage extends BaseMessage {
     }
 
     protected String content;
+    protected EncryptTypeEnum encryptType;
 
     public ServerBoardcastMessage(String content) {
         this.content = content;
+        this.encryptType = null;
     }
 
     @Override

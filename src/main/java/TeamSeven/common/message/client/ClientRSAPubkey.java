@@ -1,5 +1,6 @@
 package TeamSeven.common.message.client;
 
+import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.enumerate.TransMessageTypeEnum;
 import TeamSeven.common.message.BaseMessage;
 

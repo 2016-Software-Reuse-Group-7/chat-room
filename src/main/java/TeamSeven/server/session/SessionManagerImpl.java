@@ -55,4 +55,13 @@ public class SessionManagerImpl extends SessionManager {
         this.sessionEncryptTypeMap.put(session, type);
     }
 
+    @Override
+    public EncryptTypeEnum getSessionEncryptType(Session session) {
+        return this.sessionEncryptTypeMap.get(session);
+    }
+
+    @Override
+    public Key getSessionEncryptKey(Session session) {
+        return this.sessionKeyMap.get(session);
+    }
 }

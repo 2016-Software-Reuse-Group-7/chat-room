@@ -51,4 +51,8 @@ public abstract class SessionManager {
      * @param type
      */
     public abstract void setSessionEncryptType(Session session, EncryptTypeEnum type);
+
+    public abstract EncryptTypeEnum getSessionEncryptType(Session session);
+
+    public abstract Key getSessionEncryptKey(Session session);
 }
