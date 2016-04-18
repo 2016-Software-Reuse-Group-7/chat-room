@@ -65,7 +65,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
         Session currentSession = new Session(conn);
         EncryptTypeEnum encryptType = null;
         String decryptedMessageStr = null;
-        
+
         if ( sessionManager.hasSession(currentSession) ) {
             encryptType = sessionManager.getSessionEncryptType(currentSession);
             if (encryptType == null) {

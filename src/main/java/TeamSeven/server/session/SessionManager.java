@@ -52,7 +52,17 @@ public abstract class SessionManager {
      */
     public abstract void setSessionEncryptType(Session session, EncryptTypeEnum type);
 
+    /**
+     * 获取session的加密类型
+     * @param session
+     * @return
+     */
     public abstract EncryptTypeEnum getSessionEncryptType(Session session);
 
+    /**
+     * 获取session的密钥/公钥
+     * @param session
+     * @return
+     */
     public abstract Key getSessionEncryptKey(Session session);
 }
