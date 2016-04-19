@@ -9,7 +9,7 @@ import java.security.PublicKey;
 /**
  * Created by joshoy on 16/4/18.
  */
-public class ClientRSAPubkey extends BaseMessage {
+public class ClientPublicKeyMessage extends BaseMessage {
     @Override
     public TransMessageTypeEnum getType() {
         return TransMessageTypeEnum.CLIENT_PUBKEY;
@@ -17,7 +17,7 @@ public class ClientRSAPubkey extends BaseMessage {
 
     protected PublicKey pubKey;
 
-    public ClientRSAPubkey(PublicKey pubKey) {
+    public ClientPublicKeyMessage(PublicKey pubKey) {
         this.pubKey = pubKey;
     }
 
