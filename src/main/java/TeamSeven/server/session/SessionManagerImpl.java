@@ -4,9 +4,9 @@ import TeamSeven.common.entity.Session;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 
 import java.security.Key;
+import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 /**
  * Created by joshoy on 16/4/19.
@@ -48,6 +48,16 @@ public class SessionManagerImpl extends SessionManager {
     @Override
     public void setSessionKey(Session session, Key key) {
         this.sessionKeyMap.put(session, key);
+    }
+
+    @Override
+    public PublicKey getSessionPublicKey(Session session) {
+        return this.sessionPublicKeyMap.get(session);
+    }
+
+    @Override
+    public void setSessionPublicKey(Session session, PublicKey key) {
+        this.sessionPublicKeyMap.put(session, key);
     }
 
     @Override

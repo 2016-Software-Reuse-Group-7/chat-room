@@ -1,4 +1,6 @@
-package zip;
+package TeamSeven.server.zip;
+
+import TeamSeven.server.zip.NFDFlightDataTimerTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,20 +16,21 @@ import java.util.zip.ZipOutputStream;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
 public class Time { 
-		//Ê±¼ä¼ä¸ô
-		private static final long PERIOD_DAY = 24 * 60 * 60 * 1000; 
+		//Ê±ï¿½ï¿½ï¿½ï¿½
+        private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
 		public Time() {
 		Calendar calendar = Calendar.getInstance(); 
-		/*** ¶¨ÖÆÃ¿ÈÕ2:00Ö´ÐÐ·½·¨ ***/
+		/*** ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½2:00Ö´ï¿½Ð·ï¿½ï¿½ï¿½ ***/
 		calendar.set(Calendar.HOUR_OF_DAY, 20);
 		calendar.set(Calendar.MINUTE, 10);
 		calendar.set(Calendar.SECOND, 10);
 
-		Date date=calendar.getTime(); //µÚÒ»´ÎÖ´ÐÐ¶¨Ê±ÈÎÎñµÄÊ±¼ä
+		Date date=calendar.getTime(); //ï¿½ï¿½Ò»ï¿½ï¿½Ö´ï¿½Ð¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 
-		//Èç¹ûµÚÒ»´ÎÖ´ÐÐ¶¨Ê±ÈÎÎñµÄÊ±¼ä Ð¡ÓÚ µ±Ç°µÄÊ±¼ä
-		//´ËÊ±ÒªÔÚ µÚÒ»´ÎÖ´ÐÐ¶¨Ê±ÈÎÎñµÄÊ±¼ä ¼ÓÒ»Ìì£¬ÒÔ±ã´ËÈÎÎñÔÚÏÂ¸öÊ±¼äµãÖ´ÐÐ¡£Èç¹û²»¼ÓÒ»Ìì£¬ÈÎÎñ»áÁ¢¼´Ö´ÐÐ¡£
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ö´ï¿½Ð¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ Ð¡ï¿½ï¿½ ï¿½ï¿½Ç°ï¿½ï¿½Ê±ï¿½ï¿½
+		//ï¿½ï¿½Ê±Òªï¿½ï¿½ ï¿½ï¿½Ò»ï¿½ï¿½Ö´ï¿½Ð¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½Ò»ï¿½ì£¬ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¸ï¿½Ê±ï¿½ï¿½ï¿½Ö´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ì£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð¡ï¿½
 		if (date.before(new Date())) {
 		date = this.addDay(date, 1);
 		}
@@ -35,23 +38,23 @@ public class Time {
 		Timer timer = new Timer();
 
 		NFDFlightDataTimerTask task = new NFDFlightDataTimerTask();
-		//°²ÅÅÖ¸¶¨µÄÈÎÎñÔÚÖ¸¶¨µÄÊ±¼ä¿ªÊ¼½øÐÐÖØ¸´µÄ¹Ì¶¨ÑÓ³ÙÖ´ÐÐ¡£
+		//ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä¿ªÊ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Ä¹Ì¶ï¿½ï¿½Ó³ï¿½Ö´ï¿½Ð¡ï¿½
 		timer.schedule(task,date,PERIOD_DAY);
 		}
 
-		// Ôö¼Ó»ò¼õÉÙÌìÊý
+		// ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		public Date addDay(Date date, int num) {
-		Calendar startDT = Calendar.getInstance();
-		startDT.setTime(date);
-		startDT.add(Calendar.DAY_OF_MONTH, num);
-		return startDT.getTime();
+			Calendar startDT = Calendar.getInstance();
+			startDT.setTime(date);
+			startDT.add(Calendar.DAY_OF_MONTH, num);
+			return startDT.getTime();
 		}
 		
 		 public static void main(String arg[]) {
 		        new Time();
 		    }
 
-		}
+}
 
 
 

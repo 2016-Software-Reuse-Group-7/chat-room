@@ -1,4 +1,4 @@
-package zip;
+package TeamSeven.server.zip;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import javax.servlet.ServletContextListener;
 public class ZipFile {
 	  public static void ZipFile(String filepath ,String zippath) {
 	        try {
-	            File file = new File(filepath);// Òª±»Ñ¹ËõµÄÎÄ¼þ¼Ð
+	            File file = new File(filepath);// Òªï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 	            File zipFile = new File(zippath);
 	            InputStream input = null;
 	            ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));

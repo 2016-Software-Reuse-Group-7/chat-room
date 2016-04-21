@@ -3,6 +3,7 @@ package TeamSeven.server.socket;
 import TeamSeven.common.entity.Session;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.server.ServerAskEncrypyTypeMessage;
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
 import TeamSeven.server.session.SessionManager;
 import TeamSeven.util.encrypt.AsymmertricCoder;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 
 
@@ -39,6 +41,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
         this.sessionManager.addSession(new Session(conn));
         this.sessionManager.setSessionEncryptType(new Session(conn), null);
+        this.dispatcher.dispatch(new ServerAskEncrypyTypeMessage(), conn);
     }
 
     @Override
@@ -52,55 +55,62 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
      */
     @Override
     public void onMessage(WebSocket conn, String messageStr) {
-        // 消息可能已被加密, 需要检查并解密
-        String encryptedMessageStr = null;
-        try {
-            encryptedMessageStr = (String) cs.deserializeStringifyObject(messageStr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        Session currentSession = new Session(conn);
-        EncryptTypeEnum encryptType = null;
         String decryptedMessageStr = null;
+        Session currentSession = new Session(conn);
 
-        if ( sessionManager.hasSession(currentSession) ) {
-            encryptType = sessionManager.getSessionEncryptType(currentSession);
-            if (encryptType == null) {
-                decryptedMessageStr = encryptedMessageStr;
+        if ( sessionManager.getSessionEncryptType(currentSession) != null ) {
+            // 消息可能已被加密, 需要检查并解密
+            String encryptedMessageStr = null;
+            try {
+                encryptedMessageStr = (String) cs.deserializeStringifyObject(messageStr);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            // 如果有加密
-            else {
-                // 对称加密
-                if (encryptType.isSymmetricEncryption()) {
-                    try {
-                        SymmetricCoder sc = (SymmetricCoder) encryptType.getCoderClass().newInstance();
-                        decryptedMessageStr = new String(
-                            sc.decrypt(encryptedMessageStr.getBytes(), sessionManager.getSessionEncryptKey(currentSession))
-                        );
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+
+            EncryptTypeEnum encryptType = null;
+            if ( sessionManager.hasSession(currentSession) ) {
+                encryptType = sessionManager.getSessionEncryptType(currentSession);
+                if (encryptType == null) {
+                    decryptedMessageStr = encryptedMessageStr;
                 }
-                // 非对称加密
+                // 如果有加密
                 else {
-                    try {
-                        AsymmertricCoder ac = (AsymmertricCoder) encryptType.getCoderClass().newInstance();
-                        ac.setPublicKey((PublicKey) sessionManager.getSessionEncryptKey(currentSession));
-                        decryptedMessageStr = new String(
-                            ac.decryptWithPublicKey(encryptedMessageStr.getBytes())
-                        );
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    // 对称加密
+                    if (encryptType.isSymmetricEncryption()) {
+                        try {
+                            SymmetricCoder sc = (SymmetricCoder) encryptType.getCoderClass().newInstance();
+                            decryptedMessageStr = new String(
+                                    sc.decrypt(encryptedMessageStr.getBytes(), sessionManager.getSessionEncryptKey(currentSession))
+                            );
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    // 非对称加密
+                    else {
+                        try {
+                            AsymmertricCoder ac = (AsymmertricCoder) encryptType.getCoderClass().newInstance();
+                            ac.setPrivateKey((PrivateKey) sessionManager.getSessionEncryptKey(currentSession));
+                            decryptedMessageStr = new String(
+                                    ac.decryptWithPrivateKey(encryptedMessageStr.getBytes())
+                            );
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+            }
+            else { // if not having this session
+                // 消息来自不明session?
+                return;
             }
         }
         else {
-            // 消息来自不明session?
-            return;
+            decryptedMessageStr = messageStr;
         }
 
         BaseMessage msg;
@@ -125,6 +135,4 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     public void onError(WebSocket webSocket, Exception e) {
         // TODO: error handle
     }
-
-
 }

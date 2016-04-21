@@ -6,6 +6,8 @@ import TeamSeven.common.entity.Account;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
+import TeamSeven.util.serialize.ChatRoomSerializer;
+import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,6 +21,8 @@ public class ChatRoomClientConsole {
 
     /* Server URI, TODO: 从配置文件中读取 */
     URI serverUri;
+    /* 序列化工具 */
+    ChatRoomSerializer serializeTool;
     /* Client WebSocket */
     protected ChatRoomClientSocket clientSocket;
     /* 连接加密方式, 初始为null */
@@ -36,6 +40,7 @@ public class ChatRoomClientConsole {
         }
         this.dispatcher = new ConsoleClientSideMessageDispatcher(this);
         this.connectionEncryptType = null;
+        this.serializeTool = new ChatRoomSerializerImpl();
     }
 
     /* *
@@ -72,7 +77,7 @@ public class ChatRoomClientConsole {
      * 发送数据流 (String)
      * @param data
      */
-    public void sendData(String data) {
+    public void sendRaw(String data) {
         this.clientSocket.send(data);
     }
 
@@ -80,7 +85,7 @@ public class ChatRoomClientConsole {
      * 发送数据流 (byte[])
      * @param data
      */
-    public void sendData(byte[] data) {
+    public void sendRaw(byte[] data) {
         this.clientSocket.send(data);
     }
 

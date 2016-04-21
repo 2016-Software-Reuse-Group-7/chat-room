@@ -18,5 +18,6 @@ public enum TransMessageTypeEnum {
     SERVER_BOARDCAST,
     SERVER_SECKEY,
     SERVER_PUBKEY,
+    SERVER_ASK_ENCRYPT_TYPE
     // TODO: add more
 }
