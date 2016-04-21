@@ -16,7 +16,6 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
         super(applier);
     }
 
-
     @Override
     public void dispatch(BaseMessage message, WebSocket connFrom) {
         handler = null;
@@ -24,7 +23,7 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
             case SERVER_ACK:
                 break;
             case SERVER_BOARDCAST:
-                handler = new ServerBoardcastHandler( (ServerBoardcastMessage) message , connFrom, applier );
+                handler = new ServerBoardcastHandler( (ServerBoardcastMessage) message, connFrom, applier );
                 break;
             case SERVER_PUBKEY:
                 handler = new ServerPublicKeyHandler( (ServerPublicKeyMessage) message, connFrom, applier );

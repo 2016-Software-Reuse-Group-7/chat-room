@@ -1,10 +1,12 @@
 package TeamSeven.client.socket;
 
+import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.dispatcher.MessageDispatcher;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 
 import java.net.URI;
+import java.security.Key;
 import java.util.Map;
 
 /**
@@ -14,17 +16,18 @@ public abstract class ChatRoomClientSocket extends WebSocketClient {
 
     protected URI serverUri;
     protected MessageDispatcher dispatcher;
-    protected Object handleApplier;
 
     /**
      * @param serverUri  WebSocket Server URI
      * @param dispatcher
      */
-    public ChatRoomClientSocket(URI serverUri, MessageDispatcher dispatcher, Object appiler) {
+    public ChatRoomClientSocket(URI serverUri, MessageDispatcher dispatcher) {
         super(serverUri);
         this.serverUri = serverUri;
         this.dispatcher = dispatcher;
-        this.handleApplier = appiler;
     }
 
+    public abstract void setEncryptType(EncryptTypeEnum type);
+
+    public abstract void setConnectionKey(Key k);
 }

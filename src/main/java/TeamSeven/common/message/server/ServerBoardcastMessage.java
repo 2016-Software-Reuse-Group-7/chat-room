@@ -4,21 +4,27 @@ import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.enumerate.TransMessageTypeEnum;
 import TeamSeven.common.message.BaseMessage;
 
+import java.util.Date;
+
 /**
  * Created by joshoy on 16/4/18.
  */
 public class ServerBoardcastMessage extends BaseMessage {
 
-    public String getContent() {
-        return content;
-    }
-
+    protected Date sendTime;
     protected String content;
-    protected EncryptTypeEnum encryptType;
 
     public ServerBoardcastMessage(String content) {
         this.content = content;
-        this.encryptType = null;
+        this.sendTime = new Date();
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public Date getSendTime() {
+        return this.sendTime;
     }
 
     @Override

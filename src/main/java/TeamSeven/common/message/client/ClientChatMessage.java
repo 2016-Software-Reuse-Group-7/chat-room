@@ -13,20 +13,38 @@ import java.security.Key;
 public class ClientChatMessage extends BaseMessage {
 
     protected Account sender;
+    protected boolean isPrivate;
+    protected String targetUserId;
     protected String content;
-    protected EncryptTypeEnum encryptType;
 
     public ClientChatMessage(String content, Account sender) {
+        this.isPrivate = false;
         this.sender = sender;
         this.content = content;
-        this.encryptType = null;
+    }
+
+    public ClientChatMessage(String content, Account sender, String targetUserId) {
+        this.isPrivate = true;
+        this.sender = sender;
+        this.content = content;
+        this.targetUserId = targetUserId;
     }
 
     public String getContent() {
         return this.content;
     }
 
-    public Account getAccount() { return this.sender; }
+    public Account getAccount() {
+        return this.sender;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
 
     @Override
     public TransMessageTypeEnum getType() {

@@ -21,6 +21,6 @@ public class ServerBoardcastHandler extends BaseHandler {
 
     @Override
     public void onHandle() {
-
+        System.out.println("[系统广播 @ " + this.message.getSendTime().toString() + "]: " + this.message.getContent());
     }
 }
