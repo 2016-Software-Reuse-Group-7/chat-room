@@ -1,4 +1,4 @@
-package Zip;
+package zip;
 
 import java.util.TimerTask;
 import java.util.logging.Logger;

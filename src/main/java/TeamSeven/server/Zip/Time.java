@@ -1,4 +1,4 @@
-package Zip;
+package zip;
 
 import java.io.File;
 import java.io.FileInputStream;
