@@ -1,8 +1,10 @@
 package TeamSeven.dispatcher;
 
 import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.client.ClientActionStartConnectionMessage;
 import TeamSeven.common.message.server.ServerBoardcastMessage;
 import TeamSeven.common.message.server.ServerPublicKeyMessage;
+import TeamSeven.handler.client.console.ClientActionStartConnectionHandler;
 import TeamSeven.handler.server.console.ServerBoardcastHandler;
 import TeamSeven.handler.server.console.ServerPublicKeyHandler;
 import org.java_websocket.WebSocket;
@@ -29,6 +31,9 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
                 handler = new ServerPublicKeyHandler( (ServerPublicKeyMessage) message, connFrom, applier );
                 break;
             case SERVER_SECKEY:
+                break;
+            case CLIENT_ACT_START_CONNECTION:
+                handler = new ClientActionStartConnectionHandler( (ClientActionStartConnectionMessage) message, connFrom, applier );
                 break;
             default:
                 break;

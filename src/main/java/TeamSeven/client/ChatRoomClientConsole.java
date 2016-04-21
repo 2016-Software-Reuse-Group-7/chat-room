@@ -2,6 +2,7 @@ package TeamSeven.client;
 
 import TeamSeven.client.socket.ChatRoomClientSocket;
 import TeamSeven.client.socket.ChatRoomClientSocketImpl;
+import TeamSeven.common.entity.Account;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
