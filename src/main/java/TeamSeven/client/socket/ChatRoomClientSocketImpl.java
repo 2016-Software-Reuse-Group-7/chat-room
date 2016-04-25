@@ -1,6 +1,7 @@
 package TeamSeven.client.socket;
 
 import TeamSeven.common.enumerate.EncryptTypeEnum;
+import TeamSeven.common.message.BaseMessage;
 import TeamSeven.dispatcher.MessageDispatcher;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
@@ -28,10 +29,10 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
      * @param serverUri  WebSocket Server URI
      * @param dispatcher
      */
-    public ChatRoomClientSocketImpl(URI serverUri, MessageDispatcher dispatcher) {
+    public ChatRoomClientSocketImpl(URI serverUri, MessageDispatcher dispatcher, EncryptTypeEnum encryptType) {
         super(serverUri, dispatcher);
         this.cs = new ChatRoomSerializerImpl();
-        this.encryptType = null;
+        this.encryptType = encryptType;
     }
 
     @Override
@@ -43,41 +44,60 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
     public void onMessage(String serverMsg) {
         /* 传来的消息可能已被加密 */
         String encryptedMsg = null;
-        /* 尝试将序列化后的密串反序列化 */
-        try {
-            encryptedMsg = (String) cs.deserializeStringifyObject(serverMsg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
         String decryptedMsg = null;
-        if (null == this.encryptType) {
-            decryptedMsg = encryptedMsg;
+
+        if (this.encryptType != null) {
+            /* 尝试将序列化后的密串反序列化 */
+            try {
+                encryptedMsg = (String) cs.deserializeStringifyObject(serverMsg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (null == this.encryptType) {
+                decryptedMsg = encryptedMsg;
+            }
+            else {
+            /* 对称加密 */
+                if (this.encryptType.isSymmetricEncryption()) {
+                    try {
+                        SymmetricCoder sc = (SymmetricCoder) this.encryptType.getCoderClass().newInstance();
+                        decryptedMsg = new String( sc.decrypt(encryptedMsg.getBytes(), connectionKey) );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            /* 非对称加密 */
+                else {
+                    try {
+                        AsymmertricCoder ac = (AsymmertricCoder) this.encryptType.getCoderClass().newInstance();
+                        ac.setPublicKey( (PublicKey) this.connectionKey );
+                        decryptedMsg = new String( ac.decryptWithPublicKey( encryptedMsg.getBytes() ) );
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         else {
-            /* 对称加密 */
-            if (this.encryptType.isSymmetricEncryption()) {
-                try {
-                    SymmetricCoder sc = (SymmetricCoder) this.encryptType.getCoderClass().newInstance();
-                    decryptedMsg = new String( sc.decrypt(encryptedMsg.getBytes(), connectionKey) );
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            /* 非对称加密 */
-            else {
-                try {
-                    AsymmertricCoder ac = (AsymmertricCoder) this.encryptType.getCoderClass().newInstance();
-                    ac.setPublicKey( (PublicKey) this.connectionKey );
-                    decryptedMsg = new String( ac.decryptWithPublicKey( encryptedMsg.getBytes() ) );
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            // 未加密
+            decryptedMsg = serverMsg;
         }
+
+        BaseMessage msg = null;
+        try {
+            msg = (BaseMessage) cs.deserializeStringifyObject(decryptedMsg);
+            this.dispatcher.dispatch(msg, this.getConnection());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("IO异常");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("反序列化失败");
+        }
+
 
     }
 

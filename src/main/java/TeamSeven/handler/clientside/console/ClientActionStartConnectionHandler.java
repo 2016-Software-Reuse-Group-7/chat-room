@@ -1,4 +1,4 @@
-package TeamSeven.handler.client.console;
+package TeamSeven.handler.clientside.console;
 
 import TeamSeven.client.ChatRoomClientConsole;
 import TeamSeven.common.message.client.ClientActionStartConnectionMessage;

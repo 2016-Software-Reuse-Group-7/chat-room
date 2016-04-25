@@ -8,15 +8,15 @@ import java.security.PublicKey;
 /**
  * Created by joshoy on 16/4/21.
  */
-public class ServerAskEncrypyTypeMessage extends BaseMessage {
+public class ServerAskEncryptTypeMessage extends BaseMessage {
 
     protected PublicKey publicKey;
 
-    public ServerAskEncrypyTypeMessage() {
+    public ServerAskEncryptTypeMessage() {
 
     }
 
-    public ServerAskEncrypyTypeMessage(PublicKey k) {
+    public ServerAskEncryptTypeMessage(PublicKey k) {
         this.publicKey = k;
     }
 

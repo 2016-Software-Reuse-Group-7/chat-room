@@ -1,4 +1,4 @@
-package TeamSeven.handler.server.console;
+package TeamSeven.handler.clientside.console;
 
 import TeamSeven.client.ChatRoomClientConsole;
 import TeamSeven.common.message.server.ServerBoardcastMessage;

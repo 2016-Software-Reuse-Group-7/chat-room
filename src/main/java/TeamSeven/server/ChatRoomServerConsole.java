@@ -164,6 +164,42 @@ public class ChatRoomServerConsole {
     }
 
     /**
+     * 把消息发送到客户端, 加密类型从session manager中读取
+     * @param conn
+     * @param message
+     */
+    public void sendMessageToClient(WebSocket conn, BaseMessage message) {
+        Session currentSession = new Session(conn);
+        String encodedMsgBuffer = null;
+        String sendingBuffer = null;
+        try {
+            encodedMsgBuffer = this.serializeMessageToString(message);
+            EncryptTypeEnum eType = this.sessionManager.getSessionEncryptType(currentSession);
+            if ( null == eType ) {
+                sendingBuffer = this.serializeMessageToString(message);
+            }
+            else if ( eType.isSymmetricEncryption() ) {
+                SecretKey k = (SecretKey) this.sessionManager.getSessionEncryptKey(currentSession);
+                SymmetricCoder sc = (SymmetricCoder) eType.getCoderClass().newInstance();
+                sendingBuffer = this.serializeTool.serializeObjectAndStringify(
+                        new String( sc.encrypt(encodedMsgBuffer, k) )
+                );
+            }
+            else {
+                PrivateKey k = (PrivateKey) this.sessionManager.getSessionEncryptKey(currentSession);
+                AsymmertricCoder ac = (AsymmertricCoder) eType.getCoderClass().newInstance();
+                ac.setPrivateKey(k);
+                sendingBuffer = this.serializeTool.serializeObjectAndStringify(
+                        new String( ac.encryptWithPrivateKey(encodedMsgBuffer.getBytes()) )
+                );
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 设置一个session的密钥/公钥和加密方式
      * @param conn
      * @param k

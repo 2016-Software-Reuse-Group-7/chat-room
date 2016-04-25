@@ -1,4 +1,4 @@
-package TeamSeven.handler.client.console;
+package TeamSeven.handler.serverside.console;
 
 import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.handler.BaseHandler;

@@ -2,11 +2,12 @@ package TeamSeven.dispatcher;
 
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientActionStartConnectionMessage;
+import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
 import TeamSeven.common.message.server.ServerBoardcastMessage;
 import TeamSeven.common.message.server.ServerPublicKeyMessage;
-import TeamSeven.handler.client.console.ClientActionStartConnectionHandler;
-import TeamSeven.handler.server.console.ServerBoardcastHandler;
-import TeamSeven.handler.server.console.ServerPublicKeyHandler;
+import TeamSeven.handler.clientside.console.ClientActionStartConnectionHandler;
+import TeamSeven.handler.clientside.console.ServerAskEncryptTypeHandler;
+import TeamSeven.handler.clientside.console.ServerBoardcastHandler;
 import org.java_websocket.WebSocket;
 
 /**
@@ -27,13 +28,13 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
             case SERVER_BOARDCAST:
                 handler = new ServerBoardcastHandler( (ServerBoardcastMessage) message, connFrom, applier );
                 break;
-            case SERVER_PUBKEY:
-                handler = new ServerPublicKeyHandler( (ServerPublicKeyMessage) message, connFrom, applier );
-                break;
             case SERVER_SECKEY:
                 break;
             case CLIENT_ACT_START_CONNECTION:
                 handler = new ClientActionStartConnectionHandler( (ClientActionStartConnectionMessage) message, connFrom, applier );
+                break;
+            case SERVER_ASK_ENCRYPT_TYPE:
+                handler = new ServerAskEncryptTypeHandler( (ServerAskEncryptTypeMessage) message, connFrom, applier );
                 break;
             default:
                 break;

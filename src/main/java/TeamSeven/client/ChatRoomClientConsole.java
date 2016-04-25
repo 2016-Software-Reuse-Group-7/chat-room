@@ -4,14 +4,23 @@ import TeamSeven.client.socket.ChatRoomClientSocket;
 import TeamSeven.client.socket.ChatRoomClientSocketImpl;
 import TeamSeven.common.entity.Account;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
+import TeamSeven.common.message.BaseMessage;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
+import TeamSeven.util.encrypt.AsymmertricCoder;
+import TeamSeven.util.encrypt.SymmetricCoder;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.SecretKey;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.KeyPair;
 import java.security.PublicKey;
 
 /**
@@ -27,8 +36,10 @@ public class ChatRoomClientConsole {
     protected ChatRoomClientSocket clientSocket;
     /* 连接加密方式, 初始为null */
     EncryptTypeEnum connectionEncryptType;
-    /* 与Server连接的公钥 */
+    /* 与Server连接的公钥, 由Server提供 */
     protected PublicKey pubKey;
+    /* 与Server连接的密钥 */
+    protected SecretKey secKey;
     /* dispatcher */
     MessageDispatcher dispatcher;
 
@@ -62,7 +73,7 @@ public class ChatRoomClientConsole {
      * @param uri
      */
     public void startConnection(URI uri) {
-        this.clientSocket = new ChatRoomClientSocketImpl(uri, this.dispatcher);
+        this.clientSocket = new ChatRoomClientSocketImpl(uri, this.dispatcher, this.connectionEncryptType);
     }
 
     /**
@@ -90,6 +101,39 @@ public class ChatRoomClientConsole {
     }
 
     /**
+     * 向服务端发送序列化 + 加密后的消息 (如不加密, 则只序列化)
+     * @param msg
+     */
+    public void sendMessageWithEncryption(BaseMessage msg) {
+        try {
+            String serializedMessage = this.serializeTool.serializeObjectAndStringify(msg);
+            String sendingBuffer = null;
+            if (this.connectionEncryptType != null) {
+                if (this.connectionEncryptType.isSymmetricEncryption()) {
+                    SymmetricCoder sc = (SymmetricCoder) this.connectionEncryptType.getCoderClass().newInstance();
+                    String encryptedBuffer = new String(sc.encrypt(serializedMessage, this.secKey));
+                    sendingBuffer = this.serializeTool.serializeObjectAndStringify(encryptedBuffer);
+                }
+                else {
+                    AsymmertricCoder ac = (AsymmertricCoder) this.connectionEncryptType.getCoderClass().newInstance();
+                    ac.setPublicKey(this.pubKey);
+                    String encryptedBuffer = new String(ac.encryptWithPublicKey(serializedMessage.getBytes()));
+                    sendingBuffer = this.serializeTool.serializeObjectAndStringify(encryptedBuffer);
+                }
+            }
+            else {
+                sendingBuffer = serializedMessage;
+            }
+            /* 无误后, 发送 */
+            this.sendRaw(sendingBuffer);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("发送序列化加密消息失败.");
+        }
+    }
+
+    /**
      * 断开连接
      */
     public void disconnect() {
@@ -99,4 +143,23 @@ public class ChatRoomClientConsole {
         }
     }
 
+    /**
+     * 从配置文件中读取加密类型
+     * @return
+     */
+    public EncryptTypeEnum readEncryptionTypeFromConfig() {
+        // TODO: 从配置文件中读取加密类型
+        return EncryptTypeEnum.AES;
+    }
+
+    /**
+     * 向自身dispatch一个消息
+     */
+    public void selfDispatch() {
+
+    }
+
+    public void setConnectionEncryptKey(Key k) {
+        this.clientSocket.setConnectionKey(k);
+    }
 }

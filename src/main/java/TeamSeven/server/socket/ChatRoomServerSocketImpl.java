@@ -3,7 +3,7 @@ package TeamSeven.server.socket;
 import TeamSeven.common.entity.Session;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
-import TeamSeven.common.message.server.ServerAskEncrypyTypeMessage;
+import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
 import TeamSeven.server.session.SessionManager;
 import TeamSeven.util.encrypt.AsymmertricCoder;
@@ -11,16 +11,9 @@ import TeamSeven.util.encrypt.SymmetricCoder;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 
 
 /**
@@ -41,7 +34,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
         this.sessionManager.addSession(new Session(conn));
         this.sessionManager.setSessionEncryptType(new Session(conn), null);
-        this.dispatcher.dispatch(new ServerAskEncrypyTypeMessage(), conn);
+        this.dispatcher.dispatch(new ServerAskEncryptTypeMessage(), conn);
     }
 
     @Override
@@ -70,7 +63,6 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
                 e.printStackTrace();
             }
 
-
             EncryptTypeEnum encryptType = null;
             if ( sessionManager.hasSession(currentSession) ) {
                 encryptType = sessionManager.getSessionEncryptType(currentSession);
@@ -96,7 +88,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
                             AsymmertricCoder ac = (AsymmertricCoder) encryptType.getCoderClass().newInstance();
                             ac.setPrivateKey((PrivateKey) sessionManager.getSessionEncryptKey(currentSession));
                             decryptedMessageStr = new String(
-                                    ac.decryptWithPrivateKey(encryptedMessageStr.getBytes())
+                                    ac.decryptWithPrivateKey( encryptedMessageStr.getBytes() )
                             );
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -106,6 +98,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
             }
             else { // if not having this session
                 // 消息来自不明session?
+                System.err.println("消息来自不明session?");
                 return;
             }
         }

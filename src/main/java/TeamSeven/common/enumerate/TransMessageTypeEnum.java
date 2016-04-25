@@ -13,6 +13,7 @@ public enum TransMessageTypeEnum {
     CLIENT_SECKEY,
     CLIENT_PUBKEY,
     CLIENT_ACT_START_CONNECTION,
+    CLIENT_RESP_ENCRYPT_TYPE,
     // 服务端产生的消息类型
     SERVER_ACK,
     SERVER_BOARDCAST,

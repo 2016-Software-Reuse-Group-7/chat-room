@@ -69,13 +69,13 @@ public class AESCoder extends SymmetricCoder {
     }
 
     @Override
-    public void spanKey() {
+    public SecretKey spanKey() {
         // 默认为256位密钥
-        this.spanKey(256);
+        return this.spanKey(256);
     }
 
     @Override
-    public void spanKey(int keyLen) {
+    public SecretKey spanKey(int keyLen) {
         try {
             this.keygen = KeyGenerator.getInstance(this.KEY_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
@@ -85,6 +85,7 @@ public class AESCoder extends SymmetricCoder {
         SecretKey secretKey = keygen.generateKey();
         System.out.println("New key: " + secretKey.toString());
         this.deskey = secretKey;
+        return secretKey;
     }
 
 }

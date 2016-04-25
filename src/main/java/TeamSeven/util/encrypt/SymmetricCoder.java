@@ -19,7 +19,7 @@ public abstract class SymmetricCoder {
         //实例化支持DES算法的密钥生成器(算法名称命名需按规定，否则抛出异常)
         keygen = KeyGenerator.getInstance(eType);//
         // 生成密钥
-        deskey = keygen.generateKey();
+        // deskey = keygen.generateKey();
         // 生成Cipher对象,指定其支持的DES算法
         c = Cipher.getInstance(eType);
     }
@@ -51,7 +51,7 @@ public abstract class SymmetricCoder {
     public abstract byte[] decrypt(byte[] buff, Key usingKey) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException;
 
     /* 产生并保存新密钥 */
-    public abstract void spanKey();
-    public abstract void spanKey(int keyLen);
+    public abstract SecretKey spanKey();
+    public abstract SecretKey spanKey(int keyLen);
 
 }

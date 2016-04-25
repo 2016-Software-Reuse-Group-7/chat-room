@@ -1,4 +1,4 @@
-package TeamSeven.handler.client.ui;
+package TeamSeven.handler.clientside.ui;
 
 import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.handler.BaseHandler;
