@@ -30,13 +30,11 @@ public class PerformanceManagerImpl implements PerformanceManager
         log = new Log();
         mc = new MessageCount( true );
 
-        log.setInterval( 10000 );
+        log.setPMDir( filePath + "/log/" );
 
         filePath = "logFiles/serverLog";
         zipFilePath = "logFiles/zipFiles/server";
-        Date dt = new Date();
-        messageFileName = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( dt );
-        log.createFile( filePath + "/messages/" + messageFileName + ".txt" );
+
 
         startLog();
     }
@@ -49,10 +47,9 @@ public class PerformanceManagerImpl implements PerformanceManager
 
         filePath = "logFiles/clientLog/" + name;
         zipFilePath = "logFiles/zipFiles/" + name;
-        Date dt = new Date();
-        messageFileName = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( dt );
-        log.createFile( filePath + "/messages/" + messageFileName + ".txt" );
+        log.setPMDir( filePath + "/log/" );
 
+        newMessageFile();
         startLog();
     }
 
@@ -88,41 +85,40 @@ public class PerformanceManagerImpl implements PerformanceManager
 
     // 停止定时生成文件,并将未被压缩的文件压缩
     public void endLog() throws IOException {
-        doCompass();
+        zipManager.doCompass( zipFilePath );
         log.stop();
     }
+
+
 
     // 定时调用doCompass
     public void startCompass()
     {
-        zipTimer timer = new zipTimer();
+        zipManager timer = new zipManager();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 doCompass();
 
                 Log.resetCompress();
-                Date dt = new Date();
-                messageFileName = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( dt );
-                log.createFile( filePath + "/messages/" + messageFileName + ".txt" );
+                newMessageFile();
             }
         };
         timer.setTimerTask( task );
     }
 
-    // 压缩
     public void doCompass()
     {
-        try {
-            Date dt = new Date();
-            DateFormat df = new SimpleDateFormat( "yyyyMMddHHmmss" );
-            String time = df.format( dt );
-            Log.compress( zipFilePath + "_" + time + ".zip" );
+        zipManager.doCompass( zipFilePath );
+    }
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    public void newMessageFile()
+    {
+        Date dt = new Date();
+        messageFileName = new SimpleDateFormat( "yyyyMMddHHmmss" ).format( dt );
+        log.createFile( filePath + "/messages/" + messageFileName + ".txt" );
     }
 
     // 记录消息
