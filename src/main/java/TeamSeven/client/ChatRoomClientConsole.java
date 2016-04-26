@@ -10,6 +10,8 @@ import TeamSeven.common.message.client.ClientLoginMessage;
 import TeamSeven.common.message.server.ServerRespLoginSuccessMessage;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
+import TeamSeven.util.config.ConfigManager;
+import TeamSeven.util.config.ConfigManagerImpl;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
 import TeamSeven.util.performace.PerformanceManager;
@@ -50,26 +52,34 @@ public class ChatRoomClientConsole {
     /* 与Server连接的密钥 */
     protected SecretKey secKey;
     /* dispatcher */
-    MessageDispatcher dispatcher;
+    protected MessageDispatcher dispatcher;
     /* performance manager */
-    PerformanceManager performanceManager;
+    protected PerformanceManager performanceManager;
+    /* 配置管理 */
+    protected ConfigManager configManager;
 
     /* 是否处于已登录状态 */
     protected Boolean isLogged;
-
     /* 账号 */
     protected Account loggedAccount;
 
-    public ChatRoomClientConsole() {
-        try {
-            this.serverUri = new URI("ws://127.0.0.1:8077");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+    public ChatRoomClientConsole(String configFileName) {
+
         this.dispatcher = new ConsoleClientSideMessageDispatcher(this);
         this.connectionEncryptType = null;
         this.serializeTool = new ChatRoomSerializerImpl();
         this.isLogged = false;
+        this.configManager = new ConfigManagerImpl(configFileName);
+
+        /* 初始化server uri */
+        try {
+            this.serverUri = new URI(
+                "ws://" + this.configManager.getString("connection.host") + ":" + this.configManager.getInt("connection.port")
+            );
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         /* 初始化 performace manager */
         try {
             this.performanceManager = new PerformanceManagerImpl();
@@ -77,6 +87,7 @@ public class ChatRoomClientConsole {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     /* *
@@ -95,11 +106,10 @@ public class ChatRoomClientConsole {
 
     /**
      * 连接至对应URI的Server
-     * @param uri
      */
-    public void startConnection(URI uri) {
-        System.out.println("Connecting to URI: " + uri.toString());
-        this.clientSocket = new ChatRoomClientSocketImpl(uri, this.dispatcher, this.connectionEncryptType);
+    public void startConnection() {
+        System.out.println("Connecting to URI: " + this.serverUri.toString());
+        this.clientSocket = new ChatRoomClientSocketImpl(serverUri, this.dispatcher, this.connectionEncryptType);
         this.clientSocket.connect();
     }
 

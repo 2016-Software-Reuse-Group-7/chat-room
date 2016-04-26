@@ -13,6 +13,10 @@ public class ClientActionStartConnectionMessage extends BaseMessage {
 
     protected URI serverUri;
 
+    public ClientActionStartConnectionMessage() {
+
+    }
+
     public ClientActionStartConnectionMessage(URI serverUri) {
         this.serverUri = serverUri;
     }

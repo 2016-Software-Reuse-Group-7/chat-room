@@ -13,14 +13,8 @@ public class ClientConsoleEntry {
 
     public static void main(String[] args) {
 
-        ChatRoomClientConsole clientConsole = new ChatRoomClientConsole();
-        try {
-            clientConsole.selfDispatch(new ClientActionStartConnectionMessage(
-                    "localhost", 8077
-            ), null);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        ChatRoomClientConsole clientConsole = new ChatRoomClientConsole("demoClientConfig");
+        clientConsole.selfDispatch(new ClientActionStartConnectionMessage(), null);
         // clientConsole.selfDispatch();
 
         // clientConsole.getClientSocket().connect();

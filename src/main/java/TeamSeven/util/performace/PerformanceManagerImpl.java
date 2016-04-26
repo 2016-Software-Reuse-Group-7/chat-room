@@ -1,6 +1,8 @@
 package TeamSeven.util.performace;
 
 import TeamSeven.common.performance.MessageCount;
+import TeamSeven.util.config.ConfigManager;
+import TeamSeven.util.config.ConfigManagerImpl;
 import log.Log;
 import TeamSeven.util.performace.zip.*;
 
@@ -24,17 +26,20 @@ public class PerformanceManagerImpl implements PerformanceManager
     // 性能指数文件名: filePath + "/messages/" + initTime
     // 消息记录文件名: filePath + "/log/" + initTime
 
+    /* 配置管理 */
+    private ConfigManager configManager;
+
     // 服务端开启时
     public void initServerPm() throws IOException
     {
         log = new Log();
         mc = new MessageCount( true );
 
-        log.setPMDir( filePath + "/log/" );
-
-        filePath = "logFiles/serverLog";
-        zipFilePath = "logFiles/zipFiles/server";
-
+        /* 这里请使用配置管理模块, 不要hardcode */
+        this.configManager = new ConfigManagerImpl("demoServerConfig");
+        this.filePath = this.configManager.getString("log.outPath");
+        this.zipFilePath = this.configManager.getString("log.zipPath");
+        log.setPMDir(filePath);
 
         startLog();
     }
@@ -45,9 +50,11 @@ public class PerformanceManagerImpl implements PerformanceManager
         log = new Log();
         mc = new MessageCount( false );
 
-        filePath = "logFiles/clientLog/" + name;
-        zipFilePath = "logFiles/zipFiles/" + name;
-        log.setPMDir( filePath + "/log/" );
+        /* 这里请使用配置管理模块, 不要hardcode */
+        this.configManager = new ConfigManagerImpl("demoClientConfig");
+        this.filePath = this.configManager.getString("log.outPath");
+        this.zipFilePath = this.configManager.getString("log.zipPath");
+        log.setPMDir(filePath);
 
         newMessageFile();
         startLog();
@@ -59,7 +66,6 @@ public class PerformanceManagerImpl implements PerformanceManager
         mc.addSendMessageCount( 1 );
         log.setParam( "发送消息数量", mc.getSendMessageCount() );
         writeMessage( content );
-
     }
 
     // 服务端接收一条消息 or 客户端一条消息被接收

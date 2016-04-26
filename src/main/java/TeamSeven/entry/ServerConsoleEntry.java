@@ -11,7 +11,7 @@ public class ServerConsoleEntry {
     public static void main(String[] args) {
 
         // WebSocketImpl.DEBUG = true;
-        ChatRoomServerConsole serverConsole = new ChatRoomServerConsole();
+        ChatRoomServerConsole serverConsole = new ChatRoomServerConsole("demoServerConfig");
 
     }
 

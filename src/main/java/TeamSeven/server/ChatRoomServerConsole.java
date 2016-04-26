@@ -13,6 +13,8 @@ import TeamSeven.server.session.SessionManager;
 import TeamSeven.server.session.SessionManagerImpl;
 import TeamSeven.server.socket.ChatRoomServerSocket;
 import TeamSeven.server.socket.ChatRoomServerSocketImpl;
+import TeamSeven.util.config.ConfigManager;
+import TeamSeven.util.config.ConfigManagerImpl;
 import TeamSeven.util.encrypt.AES.AESCoder;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.RSA.RSACoder;
@@ -41,7 +43,7 @@ import static java.lang.System.exit;
  */
 public class ChatRoomServerConsole {
 
-    protected final int port = 8077;
+    protected int port;
     /*
     * 默认公钥/私钥
     * */
@@ -76,16 +78,29 @@ public class ChatRoomServerConsole {
      */
     protected ChatRoomSerializer serializeTool;
 
+    /*
+    * 配置管理
+    * */
+    protected ConfigManager configManager;
+
     protected ConsoleServerSideMessageDispatcher dispatcher;
     protected ChatRoomServerSocket ss;
 
-    public ChatRoomServerConsole() {
+    public ChatRoomServerConsole(String configFileName) {
         // 创建一个Console Dispatcher
         // 将this作为applier参数传入后, 我们在自定义的handler里就可以直接调用本类提供的方法
         this.serializeTool = new ChatRoomSerializerImpl();
         this.dispatcher = new ConsoleServerSideMessageDispatcher(this);
         this.accountManager = new AccountManagerImpl();
         this.sessionManager = new SessionManagerImpl();
+        this.configManager = new ConfigManagerImpl(configFileName);
+
+        /* 从配置文件中读取bind的端口号 */
+        this.port = this.configManager.getInt("server.port");
+        if (port == 0) {
+            System.out.println("请在配置文件中设置Server绑定的端口号.");
+            exit(0);
+        }
 
         /* 初始化 Performance Manager */
         this.performanceManager = new PerformanceManagerImpl();
@@ -276,6 +291,14 @@ public class ChatRoomServerConsole {
      */
     public PerformanceManager getPerformanceManager() {
         return this.performanceManager;
+    }
+
+    /**
+     * 获取 config manager
+     * @return
+     */
+    public ConfigManager getConfigManager() {
+        return this.configManager;
     }
 
     /**

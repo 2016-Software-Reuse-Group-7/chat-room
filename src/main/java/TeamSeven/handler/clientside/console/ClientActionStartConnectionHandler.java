@@ -21,6 +21,6 @@ public class ClientActionStartConnectionHandler extends BaseHandler {
 
     @Override
     public void onHandle() {
-        this.clientConsole.startConnection(this.message.getServerUri());
+        this.clientConsole.startConnection();
     }
 }
