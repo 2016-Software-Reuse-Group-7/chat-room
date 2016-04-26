@@ -85,7 +85,7 @@ public class PerformanceManagerImpl implements PerformanceManager
 
     // 停止定时生成文件,并将未被压缩的文件压缩
     public void endLog() throws IOException {
-        zipManager.doCompass( zipFilePath );
+        ZipManager.doCompass( zipFilePath );
         log.stop();
     }
 
@@ -94,7 +94,7 @@ public class PerformanceManagerImpl implements PerformanceManager
     // 定时调用doCompass
     public void startCompass()
     {
-        zipManager timer = new zipManager();
+        ZipManager timer = new ZipManager();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -109,7 +109,7 @@ public class PerformanceManagerImpl implements PerformanceManager
 
     public void doCompass()
     {
-        zipManager.doCompass( zipFilePath );
+        ZipManager.doCompass( zipFilePath );
     }
 
 

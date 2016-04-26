@@ -4,6 +4,8 @@ import TeamSeven.common.entity.Account;
 import TeamSeven.common.entity.Session;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.client.ClientChatMessage;
+import TeamSeven.common.message.server.ServerRespLoginSuccessMessage;
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
 import TeamSeven.server.account.AccountManager;
 import TeamSeven.server.account.AccountManagerImpl;
@@ -15,6 +17,8 @@ import TeamSeven.util.encrypt.AES.AESCoder;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.RSA.RSACoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
+import TeamSeven.util.performace.PerformanceManager;
+import TeamSeven.util.performace.PerformanceManagerImpl;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 import org.java_websocket.WebSocket;
@@ -23,10 +27,14 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.security.*;
 import java.util.Collection;
+
+import static java.lang.System.exit;
 
 /**
  * Created by joshoy on 16/4/17.
@@ -58,6 +66,11 @@ public class ChatRoomServerConsole {
     * */
     protected SessionManager sessionManager = null;
 
+    /*
+    * Performance Manager
+    * */
+    protected PerformanceManager performanceManager;
+
     /**
      * 序列化工具
      */
@@ -73,6 +86,14 @@ public class ChatRoomServerConsole {
         this.dispatcher = new ConsoleServerSideMessageDispatcher(this);
         this.accountManager = new AccountManagerImpl();
         this.sessionManager = new SessionManagerImpl();
+
+        /* 初始化 Performance Manager */
+        this.performanceManager = new PerformanceManagerImpl();
+        try {
+            this.performanceManager.initServerPm();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
@@ -98,6 +119,8 @@ public class ChatRoomServerConsole {
         try {
             ss = new ChatRoomServerSocketImpl(port, this.dispatcher, this.sessionManager);
             System.out.println("Server WebSocket Created.");
+            // 开始输入
+            this.startInput();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -227,6 +250,9 @@ public class ChatRoomServerConsole {
         return result;
     }
 
+    /**
+     * @return
+     */
     public AccountManager getAccountManager() {
         return this.accountManager;
     }
@@ -242,5 +268,63 @@ public class ChatRoomServerConsole {
                 this.sendMessageToClient(c, message);
             }
         }
+    }
+
+    /**
+     * 获取 server performance manager
+     * @return
+     */
+    public PerformanceManager getPerformanceManager() {
+        return this.performanceManager;
+    }
+
+    /**
+     * 关闭Server
+     */
+    public void closeServer() {
+        try {
+            this.ss.stop();
+            this.getPerformanceManager().endLog();
+            exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startInput() {
+        InputThread th = new InputThread(this);
+        ( new Thread(th) ).start();
+    }
+}
+
+class InputThread implements Runnable {
+
+    private ChatRoomServerConsole serverConsole;
+
+    public InputThread(ChatRoomServerConsole applier) {
+        this.serverConsole = applier;
+    }
+
+    public void run() {
+        while (true) {
+            BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
+            String chatContent = null;
+            try {
+                chatContent = sysin.readLine();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (chatContent.equals("exit")) {
+                serverConsole.closeServer();
+                break;
+            }
+            else {
+                // TODO: Boardcast
+            }
+        }
+        return;
     }
 }

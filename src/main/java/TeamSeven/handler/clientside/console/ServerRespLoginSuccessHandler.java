@@ -25,6 +25,7 @@ public class ServerRespLoginSuccessHandler extends BaseHandler {
 
     @Override
     public void onHandle() {
+        this.clientConsole.setLogged(true);
         this.clientConsole.startChat();
     }
 }

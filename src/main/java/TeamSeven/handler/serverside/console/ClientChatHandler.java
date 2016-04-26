@@ -32,5 +32,8 @@ public class ClientChatHandler extends BaseHandler {
         serverConsole.sendMessageToAll(
                 new ServerTransferChatMessage( this.message.getContent(), senderAccount.getUserId(), new Date() )
         );
+
+        /* Performance manager actions */
+        this.serverConsole.getPerformanceManager().addReceivedMessage();
     }
 }

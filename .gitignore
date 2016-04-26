@@ -45,3 +45,7 @@ fabric.properties
 
 # library
 /lib
+
+# PM module log files
+null
+logFiles

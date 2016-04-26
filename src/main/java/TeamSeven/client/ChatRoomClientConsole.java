@@ -12,6 +12,8 @@ import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
+import TeamSeven.util.performace.PerformanceManager;
+import TeamSeven.util.performace.PerformanceManagerImpl;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 import org.java_websocket.WebSocket;
@@ -28,6 +30,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.util.Date;
 
 /**
  * Created by joshoy on 16/4/17.
@@ -48,9 +51,14 @@ public class ChatRoomClientConsole {
     protected SecretKey secKey;
     /* dispatcher */
     MessageDispatcher dispatcher;
+    /* performance manager */
+    PerformanceManager performanceManager;
 
     /* 是否处于已登录状态 */
-    Boolean isLogged;
+    protected Boolean isLogged;
+
+    /* 账号 */
+    protected Account loggedAccount;
 
     public ChatRoomClientConsole() {
         try {
@@ -62,6 +70,13 @@ public class ChatRoomClientConsole {
         this.connectionEncryptType = null;
         this.serializeTool = new ChatRoomSerializerImpl();
         this.isLogged = false;
+        /* 初始化 performace manager */
+        try {
+            this.performanceManager = new PerformanceManagerImpl();
+            this.performanceManager.initClientPm("client@" + (new Date()).toString() );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* *
@@ -200,6 +215,7 @@ public class ChatRoomClientConsole {
             String password = sysin.readLine();
 
             Account account = new Account(userId, password);
+            this.setLoggedAccount(account);
             return account;
             // clientConsole.sendMessageWithEncryption(new ClientLoginMessage(account));
         } catch (IOException e) {
@@ -212,6 +228,19 @@ public class ChatRoomClientConsole {
         InputThread th = new InputThread(this);
         ( new Thread(th) ).start();
     }
+
+    public PerformanceManager getPerformanceManager() {
+        return this.performanceManager;
+    }
+
+    public Account getLoggedAccount() {
+        return loggedAccount;
+    }
+
+    public void setLoggedAccount(Account loggedAccount) {
+        this.loggedAccount = loggedAccount;
+    }
+
 }
 
 class InputThread implements Runnable {
@@ -234,11 +263,24 @@ class InputThread implements Runnable {
             }
             if (chatContent.equals("exit")) {
                 clientConsole.clientSocket.close();
+                /* Performance manager */
+                try {
+                    clientConsole.getPerformanceManager().endLog();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             else {
                 ClientChatMessage chatMessage = new ClientChatMessage(chatContent);
                 clientConsole.sendMessageWithEncryption(chatMessage);
+                /* Performance manager */
+                try {
+                    clientConsole.getPerformanceManager().clientAddMessage(chatContent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                /* Dispatch new message to self */
                 clientConsole.selfDispatch(new ServerRespLoginSuccessMessage());
                 break;
             }

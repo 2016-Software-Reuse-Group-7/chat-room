@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class zipManager
+public class ZipManager
 {
 
 	// 时间间隔
@@ -17,7 +17,7 @@ public class zipManager
 	Timer timer = null;
 	Date zipDate = null;
 
-	public zipManager() {
+	public ZipManager() {
 		Calendar calendar = Calendar.getInstance();
 
 		// 每天2:00压缩

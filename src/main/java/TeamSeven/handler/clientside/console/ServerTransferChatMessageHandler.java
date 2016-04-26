@@ -24,5 +24,10 @@ public class ServerTransferChatMessageHandler extends BaseHandler {
         String prefix = message.getSenderId() + "(" + message.getChatTime().toString() + ")";
         String content = message.getContent();
         this.clientConsole.consoleAppendLine(prefix, content);
+        /* Performance manager */
+        if ( message.getSenderId()
+                    .equals( clientConsole.getLoggedAccount().getUserId() ) ) {
+            this.clientConsole.getPerformanceManager().addReceivedMessage();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package TeamSeven.server.Zip;
+package TeamSeven.server.zip;
 
 import java.util.TimerTask;
 import java.util.logging.Logger;
