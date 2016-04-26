@@ -5,6 +5,7 @@ import TeamSeven.client.socket.ChatRoomClientSocketImpl;
 import TeamSeven.common.entity.Account;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.client.ClientLoginMessage;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
 import TeamSeven.util.encrypt.AsymmertricCoder;
@@ -16,7 +17,9 @@ import org.java_websocket.WebSocket;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -56,6 +59,7 @@ public class ChatRoomClientConsole {
         this.dispatcher = new ConsoleClientSideMessageDispatcher(this);
         this.connectionEncryptType = null;
         this.serializeTool = new ChatRoomSerializerImpl();
+        this.isLogged = false;
     }
 
     /* *
@@ -111,26 +115,12 @@ public class ChatRoomClientConsole {
      * @param msg
      */
     public void sendMessageWithEncryption(BaseMessage msg) {
+        System.out.println("向服务器发送消息: " + msg.getType().toString());
         try {
             String serializedMessage = this.serializeTool.serializeObjectAndStringify(msg);
             String sendingBuffer = null;
 
-            if (this.connectionEncryptType != null) {
-                if (this.connectionEncryptType.isSymmetricEncryption()) {
-                    SymmetricCoder sc = (SymmetricCoder) this.connectionEncryptType.getCoderClass().newInstance();
-                    String encryptedBuffer = new String(sc.encrypt(serializedMessage, this.secKey));
-                    sendingBuffer = this.serializeTool.serializeObjectAndStringify(encryptedBuffer);
-                }
-                else {
-                    AsymmertricCoder ac = (AsymmertricCoder) this.connectionEncryptType.getCoderClass().newInstance();
-                    ac.setPublicKey(this.pubKey);
-                    String encryptedBuffer = new String(ac.encryptWithPublicKey(serializedMessage.getBytes()));
-                    sendingBuffer = this.serializeTool.serializeObjectAndStringify(encryptedBuffer);
-                }
-            }
-            else {
-                sendingBuffer = serializedMessage;
-            }
+            sendingBuffer = serializedMessage;
             /* 无误后, 发送 */
             this.sendRaw(sendingBuffer);
 
@@ -190,6 +180,26 @@ public class ChatRoomClientConsole {
 
     public ChatRoomClientSocket getClientSocket() {
         return this.clientSocket;
+    }
+
+    public Account UserEnterAccount() {
+        System.out.println("服务器请求登录.");
+        BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
+
+        try {
+
+            System.out.print("请输入用户ID: ");
+            String userId = sysin.readLine();
+            System.out.print("请输入密码: ");
+            String password = sysin.readLine();
+
+            Account account = new Account(userId, password);
+            return account;
+            // clientConsole.sendMessageWithEncryption(new ClientLoginMessage(account));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

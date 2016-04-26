@@ -170,32 +170,15 @@ public class ChatRoomServerConsole {
      * @param message
      */
     public void sendMessageToClient(WebSocket conn, BaseMessage message) {
+        System.out.println("向" + conn.getRemoteSocketAddress().toString() + "发送消息: " + message.getType().toString());
         Session currentSession = new Session(conn);
-        String encodedMsgBuffer = null;
+        // String encodedMsgBuffer = null;
         String sendingBuffer = null;
         try {
-            encodedMsgBuffer = this.serializeMessageToString(message);
+            // encodedMsgBuffer = this.serializeMessageToString(message);
             EncryptTypeEnum eType = this.sessionManager.getSessionEncryptType(currentSession);
-            if ( null == eType ) {
-                System.out.println("传输加密类型: 空");
+            if ( true ) {
                 sendingBuffer = this.serializeMessageToString(message);
-            }
-            else if ( eType.isSymmetricEncryption() ) {
-                System.out.println("传输加密类型: " + eType.toString());
-                SecretKey k = (SecretKey) this.sessionManager.getSessionEncryptKey(currentSession);
-                SymmetricCoder sc = (SymmetricCoder) eType.getCoderClass().newInstance();
-                sendingBuffer = this.serializeTool.serializeObjectAndStringify(
-                        new String( sc.encrypt(encodedMsgBuffer, k) )
-                );
-            }
-            else {
-                System.out.println("传输加密类型: " + eType.toString());
-                PrivateKey k = (PrivateKey) this.sessionManager.getSessionEncryptKey(currentSession);
-                AsymmertricCoder ac = (AsymmertricCoder) eType.getCoderClass().newInstance();
-                ac.setPrivateKey(k);
-                sendingBuffer = this.serializeTool.serializeObjectAndStringify(
-                        new String( ac.encryptWithPrivateKey(encodedMsgBuffer.getBytes()) )
-                );
             }
             this.sendRaw(conn, sendingBuffer);
         }

@@ -18,7 +18,7 @@ public class ClientLoginMessage extends BaseMessage {
 
     @Override
     public TransMessageTypeEnum getType() {
-        return null;
+        return TransMessageTypeEnum.CLIENT_LOGIN;
     }
 
     public Account getLoginAccount() {

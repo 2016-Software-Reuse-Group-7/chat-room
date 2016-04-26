@@ -22,7 +22,7 @@ public final class Session implements Serializable {
 
     @Override
     public int hashCode() {
-        return this.conn.getRemoteSocketAddress().hashCode();
+        return this.conn.getRemoteSocketAddress().toString().hashCode();
     }
 
     @Override

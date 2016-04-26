@@ -51,64 +51,9 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     @Override
     public void onMessage(WebSocket conn, String messageStr) {
 
-        String decryptedMessageStr = null;
-        Session currentSession = new Session(conn);
+        String decryptedMessageStr = messageStr;
 
-        if ( sessionManager.getSessionEncryptType(currentSession) != null ) {
-            // 消息可能已被加密, 需要检查并解密
-            String encryptedMessageStr = null;
-            try {
-                encryptedMessageStr = (String) cs.deserializeStringifyObject(messageStr);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            EncryptTypeEnum encryptType = null;
-            if ( sessionManager.hasSession(currentSession) ) {
-                encryptType = sessionManager.getSessionEncryptType(currentSession);
-                if (encryptType == null) {
-                    decryptedMessageStr = encryptedMessageStr;
-                }
-                // 如果有加密
-                else {
-                    // 对称加密
-                    if (encryptType.isSymmetricEncryption()) {
-                        try {
-                            SymmetricCoder sc = (SymmetricCoder) encryptType.getCoderClass().newInstance();
-                            decryptedMessageStr = new String(
-                                    sc.decrypt(encryptedMessageStr.getBytes(), sessionManager.getSessionEncryptKey(currentSession))
-                            );
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    // 非对称加密
-                    else {
-                        try {
-                            AsymmertricCoder ac = (AsymmertricCoder) encryptType.getCoderClass().newInstance();
-                            ac.setPrivateKey((PrivateKey) sessionManager.getSessionEncryptKey(currentSession));
-                            decryptedMessageStr = new String(
-                                    ac.decryptWithPrivateKey( encryptedMessageStr.getBytes() )
-                            );
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-            else { // if not having this session
-                // 消息来自不明session?
-                System.err.println("消息来自不明session?");
-                return;
-            }
-        }
-        else {
-            decryptedMessageStr = messageStr;
-        }
-
-        BaseMessage msg;
+        BaseMessage msg = null;
         // 当一条被序列化的消息到达后
 
         try {

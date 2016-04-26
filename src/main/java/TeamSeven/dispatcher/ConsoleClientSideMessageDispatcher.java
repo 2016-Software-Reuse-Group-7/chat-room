@@ -2,13 +2,8 @@ package TeamSeven.dispatcher;
 
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientActionStartConnectionMessage;
-import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
-import TeamSeven.common.message.server.ServerAskLoginMessage;
-import TeamSeven.common.message.server.ServerBoardcastMessage;
-import TeamSeven.handler.clientside.console.ClientActionStartConnectionHandler;
-import TeamSeven.handler.clientside.console.ServerAskEncryptTypeHandler;
-import TeamSeven.handler.clientside.console.ServerAskLoginHandler;
-import TeamSeven.handler.clientside.console.ServerBoardcastHandler;
+import TeamSeven.common.message.server.*;
+import TeamSeven.handler.clientside.console.*;
 import org.java_websocket.WebSocket;
 
 /**
@@ -23,7 +18,7 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
     @Override
     public void dispatch(BaseMessage message, WebSocket connFrom) {
         handler = null;
-        System.out.println("Dispatching message type: " + message.getType().toString());
+        System.out.println("客户端接收到消息类型: " + message.getType().toString());
         switch (message.getType()) {
             case SERVER_ACK:
                 break;
@@ -40,14 +35,20 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
                 break;
             case SERVER_ASK_LOGIN:
                 handler = new ServerAskLoginHandler( (ServerAskLoginMessage) message, connFrom, applier );
+                break;
             case SERVER_RESP_LOGIN_SUCCESS:
-                handler = null;  // TODO
+                handler = new ServerRespLoginSuccessHandler( (ServerRespLoginSuccessMessage) message, connFrom, applier );
+                break;
             case SERVER_RESP_LOGIN_FAILED:
-                handler = null;  // TODO
+                handler = new ServerRespLoginFailedHandler( (ServerRespLoginFailedMessage) message, connFrom, applier );
+                break;
             default:
                 break;
         }
-        if (null != handler) {
+        if (null == handler) {
+            System.err.println("错误: 消息的handler还未定义! 消息类型为: " + message.getType().toString());
+        }
+        else {
             handler.onHandle();
         }
     }

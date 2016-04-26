@@ -22,7 +22,7 @@ public class ClientRespEncryptTypeMessage extends BaseMessage {
 
     @Override
     public TransMessageTypeEnum getType() {
-        return null;
+        return TransMessageTypeEnum.CLIENT_RESP_ENCRYPT_TYPE;
     }
 
     public Key getClientKey() {

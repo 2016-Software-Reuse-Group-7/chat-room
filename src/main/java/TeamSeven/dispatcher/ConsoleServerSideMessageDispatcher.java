@@ -2,9 +2,11 @@ package TeamSeven.dispatcher;
 
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientChatMessage;
+import TeamSeven.common.message.client.ClientLoginMessage;
 import TeamSeven.common.message.client.ClientRespEncryptTypeMessage;
 import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
 import TeamSeven.handler.serverside.console.ClientChatHandler;
+import TeamSeven.handler.serverside.console.ClientLoginHandler;
 import TeamSeven.handler.serverside.console.ClientRespEncryptTypeHandler;
 import TeamSeven.handler.serverside.console.ServerAskEncryptTypeHandler;
 import org.java_websocket.WebSocket;
@@ -21,7 +23,7 @@ public class ConsoleServerSideMessageDispatcher extends MessageDispatcher {
     @Override
     public void dispatch(BaseMessage message, WebSocket conn)  {
 
-        System.out.println("Dispatching message type: " + message.getType().toString());
+        System.out.println("服务端接收到消息类型: " + message.getType().toString());
 
         switch (message.getType()) {
             case CLIENT_CHAT:
@@ -32,9 +34,18 @@ public class ConsoleServerSideMessageDispatcher extends MessageDispatcher {
                 break;
             case SERVER_ASK_ENCRYPT_TYPE:
                 handler = new ServerAskEncryptTypeHandler((ServerAskEncryptTypeMessage) message, conn, applier);
+                break;
+            case CLIENT_LOGIN:
+                handler = new ClientLoginHandler( (ClientLoginMessage) message, conn, applier );
+                break;
             default:
                 break;
         }
-        handler.onHandle();
+        if (null == handler) {
+            System.err.println("错误: 消息的handler还未定义! 消息类型为: " + message.getType().toString());
+        }
+        else {
+            handler.onHandle();
+        }
     }
 }

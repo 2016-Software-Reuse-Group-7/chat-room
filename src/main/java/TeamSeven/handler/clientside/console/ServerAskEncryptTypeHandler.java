@@ -4,6 +4,7 @@ import TeamSeven.client.ChatRoomClientConsole;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.client.ClientRespEncryptTypeMessage;
 import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
+import TeamSeven.common.message.server.ServerAskLoginMessage;
 import TeamSeven.handler.BaseHandler;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
@@ -59,5 +60,6 @@ public class ServerAskEncryptTypeHandler extends BaseHandler {
                 e.printStackTrace();
             }
         }
+
     }
 }

@@ -29,27 +29,14 @@ public class ServerAskLoginHandler extends BaseHandler {
     @Override
     public void onHandle() {
          // Server要求Client进行登录
+        System.out.println("Server要求Client进行登录.");
 
         /* 如果已经登录 */
         if ( this.clientConsole.getLogged() ) {
             // TODO: Disconnect
         }
 
-        System.out.println("服务器请求登录.");
-        BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
-
-        try {
-
-            System.out.print("请输入用户ID: ");
-            String userId = sysin.readLine();
-            System.out.print("请输入密码: ");
-            String password = sysin.readLine();
-
-            Account account = new Account(userId, password);
-            clientConsole.sendMessageWithEncryption(new ClientLoginMessage(account));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Account account = this.clientConsole.UserEnterAccount();
+        this.clientConsole.sendMessageWithEncryption(new ClientLoginMessage(account));
     }
 }
