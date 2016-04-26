@@ -11,15 +11,17 @@ import TeamSeven.common.message.BaseMessage;
 public class ClientLoginMessage extends BaseMessage {
 
     protected Account loginAccount;
-    EncryptTypeEnum encryptType;
 
-    public ClientLoginMessage(Account loginAccount, EncryptTypeEnum encryptType) {
+    public ClientLoginMessage(Account loginAccount) {
         this.loginAccount = loginAccount;
-        this.encryptType = encryptType;
     }
 
     @Override
     public TransMessageTypeEnum getType() {
         return null;
+    }
+
+    public Account getLoginAccount() {
+        return this.loginAccount;
     }
 }

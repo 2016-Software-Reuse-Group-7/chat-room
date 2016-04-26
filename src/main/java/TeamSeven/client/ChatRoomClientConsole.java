@@ -43,6 +43,9 @@ public class ChatRoomClientConsole {
     /* dispatcher */
     MessageDispatcher dispatcher;
 
+    /* 是否处于已登录状态 */
+    Boolean isLogged;
+
     public ChatRoomClientConsole() {
         try {
             this.serverUri = new URI("ws://127.0.0.1:8077");
@@ -159,7 +162,21 @@ public class ChatRoomClientConsole {
 
     }
 
+    /**
+     * 设置连接密钥
+     * @param k
+     */
     public void setConnectionEncryptKey(Key k) {
         this.clientSocket.setConnectionKey(k);
     }
+
+    /* 是否处于登录状态 */
+    public Boolean getLogged() {
+        return this.isLogged;
+    }
+
+    public void setLogged(Boolean b) {
+        this.isLogged = b;
+    }
+
 }

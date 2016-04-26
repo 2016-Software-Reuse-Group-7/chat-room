@@ -193,6 +193,7 @@ public class ChatRoomServerConsole {
                         new String( ac.encryptWithPrivateKey(encodedMsgBuffer.getBytes()) )
                 );
             }
+            this.sendRaw(conn, sendingBuffer);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -225,6 +226,17 @@ public class ChatRoomServerConsole {
      */
     public PrivateKey getDefaultPrivateKey() {
         return this.defaultPrivateKey;
+    }
+
+    /**
+     * 客户端登录
+     * @param conn
+     * @param account
+     * @return
+     */
+    public boolean clientLogin(WebSocket conn, Account account) {
+        boolean result = this.accountManager.accountLogin(conn, account);
+        return result;
     }
 
 }

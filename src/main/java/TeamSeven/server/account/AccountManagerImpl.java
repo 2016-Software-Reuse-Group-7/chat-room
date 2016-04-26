@@ -1,8 +1,11 @@
 package TeamSeven.server.account;
 
 import TeamSeven.common.entity.Account;
+import TeamSeven.common.entity.Session;
 import TeamSeven.common.enumerate.AccountVerifyResultEnum;
+import org.java_websocket.WebSocket;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -13,6 +16,7 @@ public class AccountManagerImpl extends AccountManager {
     public AccountManagerImpl() {
         super();
         this.loginAccountSet = new HashSet<Account>();
+        this.accountMap = new HashMap<Session, Account>();
     }
 
     @Override
@@ -21,12 +25,13 @@ public class AccountManagerImpl extends AccountManager {
     }
 
     @Override
-    public boolean accountLogin(Account account) {
+    public boolean accountLogin(WebSocket conn, Account account) {
         if ( this.hasLogged(account) && verifyAccount(account).isValid() ) {
             return false;
         }
         else {
             this.loginAccountSet.add(account);
+            this.accountMap.put(new Session(conn), account);
             return true;
         }
     }

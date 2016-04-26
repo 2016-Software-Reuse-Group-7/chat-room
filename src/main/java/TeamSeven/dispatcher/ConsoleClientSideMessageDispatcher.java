@@ -3,10 +3,11 @@ package TeamSeven.dispatcher;
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientActionStartConnectionMessage;
 import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
+import TeamSeven.common.message.server.ServerAskLoginMessage;
 import TeamSeven.common.message.server.ServerBoardcastMessage;
-import TeamSeven.common.message.server.ServerPublicKeyMessage;
 import TeamSeven.handler.clientside.console.ClientActionStartConnectionHandler;
 import TeamSeven.handler.clientside.console.ServerAskEncryptTypeHandler;
+import TeamSeven.handler.clientside.console.ServerAskLoginHandler;
 import TeamSeven.handler.clientside.console.ServerBoardcastHandler;
 import org.java_websocket.WebSocket;
 
@@ -36,6 +37,12 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
             case SERVER_ASK_ENCRYPT_TYPE:
                 handler = new ServerAskEncryptTypeHandler( (ServerAskEncryptTypeMessage) message, connFrom, applier );
                 break;
+            case SERVER_ASK_LOGIN:
+                handler = new ServerAskLoginHandler( (ServerAskLoginMessage) message, connFrom, applier );
+            case SERVER_RESP_LOGIN_SUCCESS:
+                handler = null;  // TODO
+            case SERVER_RESP_LOGIN_FAILED:
+                handler = null;  // TODO
             default:
                 break;
         }

@@ -2,6 +2,7 @@ package TeamSeven.handler.serverside.console;
 
 import TeamSeven.common.entity.Session;
 import TeamSeven.common.message.client.ClientRespEncryptTypeMessage;
+import TeamSeven.common.message.server.ServerAskLoginMessage;
 import TeamSeven.handler.BaseHandler;
 import TeamSeven.server.ChatRoomServerConsole;
 import org.java_websocket.WebSocket;
@@ -23,5 +24,6 @@ public class ClientRespEncryptTypeHandler extends BaseHandler {
     @Override
     public void onHandle() {
         serverConsole.setConnectionKeyAndEncryptType(this.ws, message.getClientKey(), message.getEncryptType());
+        serverConsole.sendMessageToClient( this.ws, new ServerAskLoginMessage() );
     }
 }
