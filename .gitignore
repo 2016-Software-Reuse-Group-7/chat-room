@@ -49,3 +49,6 @@ fabric.properties
 # PM module log files
 null
 logFiles
+
+# target class
+target
