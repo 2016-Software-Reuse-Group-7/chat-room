@@ -1,6 +1,6 @@
-package TeamSeven.server.zip;
+package TeamSeven.server.Zip;
 
-import TeamSeven.server.zip.NFDFlightDataTimerTask;
+import TeamSeven.server.Zip.NFDFlightDataTimerTask;
 
 import java.io.File;
 import java.io.FileInputStream;
