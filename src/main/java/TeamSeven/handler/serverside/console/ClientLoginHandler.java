@@ -18,6 +18,7 @@ public class ClientLoginHandler extends BaseHandler {
     public ClientLoginHandler(ClientLoginMessage msg, WebSocket conn, Object applier) {
         super(conn);
         this.message = msg;
+        logger.info(msg);
         this.serverConsole = (ChatRoomServerConsole) applier;
     }
 
