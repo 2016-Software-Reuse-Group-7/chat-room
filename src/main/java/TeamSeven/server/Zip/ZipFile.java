@@ -1,4 +1,4 @@
-package TeamSeven.server.zip;
+package TeamSeven.server.Zip;
 
 import java.io.File;
 import java.io.FileInputStream;
