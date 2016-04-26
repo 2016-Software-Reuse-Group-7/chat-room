@@ -1,4 +1,4 @@
-package TeamSeven.server.zip;
+package TeamSeven.server.Zip;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
