@@ -42,4 +42,9 @@ public class AccountManagerImpl extends AccountManager {
         return AccountVerifyResultEnum.OK;
     }
 
+    @Override
+    public Account getAccountBySession(Session session) {
+        return this.accountMap.get(session);
+    }
+
 }

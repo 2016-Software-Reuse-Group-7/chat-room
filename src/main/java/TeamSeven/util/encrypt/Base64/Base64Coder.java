@@ -7,6 +7,7 @@ import sun.misc.BASE64Encoder;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -66,12 +67,12 @@ public class Base64Coder extends SymmetricCoder {
     }
 
     @Override
-    public void spanKey() {
-
+    public SecretKey spanKey() {
+        return null;
     }
 
     @Override
-    public void spanKey(int keyLen) {
-
+    public SecretKey spanKey(int keyLen) {
+        return null;
     }
 }

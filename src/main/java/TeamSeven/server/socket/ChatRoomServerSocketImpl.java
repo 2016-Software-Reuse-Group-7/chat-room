@@ -28,6 +28,8 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
                                     ConsoleServerSideMessageDispatcher dispatcher,
                                     SessionManager sessionManager) throws UnknownHostException {
         super(port, dispatcher, sessionManager);
+        System.out.println("Starting server on port " + port);
+        this.start();
     }
 
     @Override
@@ -125,7 +127,9 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     }
 
     @Override
-    public void onError(WebSocket webSocket, Exception e) {
+    public void onError(WebSocket conn, Exception e) {
+        this.sessionManager.removeSession(new Session(conn));
+        conn.close();
         // TODO: error handle
     }
 }

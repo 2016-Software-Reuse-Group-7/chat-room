@@ -1,5 +1,7 @@
 package TeamSeven.handler.serverside.console;
 
+import TeamSeven.common.entity.Account;
+import TeamSeven.common.entity.Session;
 import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.handler.BaseHandler;
 import TeamSeven.server.ChatRoomServerConsole;
@@ -10,17 +12,19 @@ import org.java_websocket.WebSocket;
  */
 public class ClientChatHandler extends BaseHandler {
 
-    private ClientChatMessage msg;
+    private ClientChatMessage message;
     private ChatRoomServerConsole serverConsole;
 
     public ClientChatHandler(ClientChatMessage msg, WebSocket conn, Object applier) {
         super(conn);
-        this.msg = msg;
+        this.message = msg;
         this.serverConsole = (ChatRoomServerConsole) applier;
     }
 
     @Override
     public void onHandle() {
-        serverConsole.consoleAppendLine( this.msg.getAccount().getUserId(), this.msg.getContent() );
+        Session currentSession = new Session(this.ws);
+        Account senderAccount = serverConsole.getAccountManager().getAccountBySession(currentSession);
+        serverConsole.consoleAppendLine( senderAccount.getUserId(), this.message.getContent() );
     }
 }

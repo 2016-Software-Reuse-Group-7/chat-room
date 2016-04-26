@@ -96,6 +96,7 @@ public class ChatRoomServerConsole {
         // 创建Server WebSocket
         try {
             ss = new ChatRoomServerSocketImpl(port, this.dispatcher, this.sessionManager);
+            System.out.println("Server WebSocket Created.");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -176,9 +177,11 @@ public class ChatRoomServerConsole {
             encodedMsgBuffer = this.serializeMessageToString(message);
             EncryptTypeEnum eType = this.sessionManager.getSessionEncryptType(currentSession);
             if ( null == eType ) {
+                System.out.println("传输加密类型: 空");
                 sendingBuffer = this.serializeMessageToString(message);
             }
             else if ( eType.isSymmetricEncryption() ) {
+                System.out.println("传输加密类型: " + eType.toString());
                 SecretKey k = (SecretKey) this.sessionManager.getSessionEncryptKey(currentSession);
                 SymmetricCoder sc = (SymmetricCoder) eType.getCoderClass().newInstance();
                 sendingBuffer = this.serializeTool.serializeObjectAndStringify(
@@ -186,6 +189,7 @@ public class ChatRoomServerConsole {
                 );
             }
             else {
+                System.out.println("传输加密类型: " + eType.toString());
                 PrivateKey k = (PrivateKey) this.sessionManager.getSessionEncryptKey(currentSession);
                 AsymmertricCoder ac = (AsymmertricCoder) eType.getCoderClass().newInstance();
                 ac.setPrivateKey(k);
@@ -237,6 +241,10 @@ public class ChatRoomServerConsole {
     public boolean clientLogin(WebSocket conn, Account account) {
         boolean result = this.accountManager.accountLogin(conn, account);
         return result;
+    }
+
+    public AccountManager getAccountManager() {
+        return this.accountManager;
     }
 
 }

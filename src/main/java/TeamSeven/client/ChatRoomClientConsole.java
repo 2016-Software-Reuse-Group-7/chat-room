@@ -11,6 +11,7 @@ import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
+import org.java_websocket.WebSocket;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -76,7 +77,9 @@ public class ChatRoomClientConsole {
      * @param uri
      */
     public void startConnection(URI uri) {
+        System.out.println("Connecting to URI: " + uri.toString());
         this.clientSocket = new ChatRoomClientSocketImpl(uri, this.dispatcher, this.connectionEncryptType);
+        this.clientSocket.connect();
     }
 
     /**
@@ -111,6 +114,7 @@ public class ChatRoomClientConsole {
         try {
             String serializedMessage = this.serializeTool.serializeObjectAndStringify(msg);
             String sendingBuffer = null;
+
             if (this.connectionEncryptType != null) {
                 if (this.connectionEncryptType.isSymmetricEncryption()) {
                     SymmetricCoder sc = (SymmetricCoder) this.connectionEncryptType.getCoderClass().newInstance();
@@ -158,8 +162,13 @@ public class ChatRoomClientConsole {
     /**
      * 向自身dispatch一个消息
      */
-    public void selfDispatch() {
+    public void selfDispatch(BaseMessage message) {
+        this.dispatcher.dispatch(message, this.clientSocket.getConnection());
+    }
 
+    public void selfDispatch(BaseMessage message, WebSocket conn) {
+        System.out.println("Dispatch message: " + message.toString());
+        this.dispatcher.dispatch(message, conn);
     }
 
     /**
@@ -177,6 +186,10 @@ public class ChatRoomClientConsole {
 
     public void setLogged(Boolean b) {
         this.isLogged = b;
+    }
+
+    public ChatRoomClientSocket getClientSocket() {
+        return this.clientSocket;
     }
 
 }

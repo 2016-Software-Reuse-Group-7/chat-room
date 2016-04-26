@@ -21,7 +21,8 @@ public class ServerAskEncryptTypeHandler extends BaseHandler {
     @Override
     public void onHandle() {
         System.out.println("Server asking encryption type for: " + this.ws.getRemoteSocketAddress().toString());
+        // this.serverConsole.serializeMessageToString(new ServerAskEncryptTypeMessage(this.serverConsole.getDefaultPublicKey()));
+        this.serverConsole.sendMessageToClient(this.ws, new ServerAskEncryptTypeMessage(this.serverConsole.getDefaultPublicKey()));
         this.serverConsole.setConnectionKeyAndEncryptType(this.ws, this.serverConsole.getDefaultPrivateKey(), EncryptTypeEnum.RSA);
-        this.serverConsole.serializeMessageToString(new ServerAskEncryptTypeMessage(this.serverConsole.getDefaultPublicKey()));
     }
 }

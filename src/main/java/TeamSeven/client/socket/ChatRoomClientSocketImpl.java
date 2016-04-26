@@ -38,6 +38,7 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
         // TODO: on server connected
+        System.out.println("Starting connection, handshake info:" + serverHandshake.getHttpStatus());
     }
 
     @Override
@@ -104,11 +105,13 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
     @Override
     public void onClose(int code, String reason, boolean closeByRemote) {
         // TODO
+        System.out.println("Connection closed. Reason: " + reason + "; Closed by " + (closeByRemote ? "remote" : "local") + ".");
     }
 
     @Override
     public void onError(Exception e) {
         // TODO
+        e.printStackTrace();
     }
 
     @Override

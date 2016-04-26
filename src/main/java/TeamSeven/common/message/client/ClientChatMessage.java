@@ -12,30 +12,23 @@ import java.security.Key;
  */
 public class ClientChatMessage extends BaseMessage {
 
-    protected Account sender;
     protected boolean isPrivate;
     protected String targetUserId;
     protected String content;
 
-    public ClientChatMessage(String content, Account sender) {
+    public ClientChatMessage(String content) {
         this.isPrivate = false;
-        this.sender = sender;
         this.content = content;
     }
 
-    public ClientChatMessage(String content, Account sender, String targetUserId) {
+    public ClientChatMessage(String content, String targetUserId) {
         this.isPrivate = true;
-        this.sender = sender;
         this.content = content;
         this.targetUserId = targetUserId;
     }
 
     public String getContent() {
         return this.content;
-    }
-
-    public Account getAccount() {
-        return this.sender;
     }
 
     public boolean isPrivate() {

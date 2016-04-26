@@ -24,4 +24,6 @@ public abstract class AccountManager {
     public abstract boolean accountLogin(WebSocket conn, Account account);
 
     public abstract AccountVerifyResultEnum verifyAccount(Account account);
+
+    public abstract Account getAccountBySession(Session session);
 }

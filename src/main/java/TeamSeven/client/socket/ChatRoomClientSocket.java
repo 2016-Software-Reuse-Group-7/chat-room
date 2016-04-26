@@ -23,6 +23,7 @@ public abstract class ChatRoomClientSocket extends WebSocketClient {
      */
     public ChatRoomClientSocket(URI serverUri, MessageDispatcher dispatcher) {
         super(serverUri);
+        System.out.println("New ChatRoomClientSocket ready connection to: " + serverUri.getHost() + ":" + serverUri.getPort());
         this.serverUri = serverUri;
         this.dispatcher = dispatcher;
     }

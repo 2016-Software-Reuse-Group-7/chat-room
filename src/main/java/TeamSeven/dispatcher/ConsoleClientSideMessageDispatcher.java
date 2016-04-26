@@ -23,6 +23,7 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
     @Override
     public void dispatch(BaseMessage message, WebSocket connFrom) {
         handler = null;
+        System.out.println("Dispatching message type: " + message.getType().toString());
         switch (message.getType()) {
             case SERVER_ACK:
                 break;
