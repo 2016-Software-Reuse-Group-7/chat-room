@@ -42,6 +42,9 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
             case SERVER_RESP_LOGIN_FAILED:
                 handler = new ServerRespLoginFailedHandler( (ServerRespLoginFailedMessage) message, connFrom, applier );
                 break;
+            case SERVER_TRANSFER_CHAT:
+                handler = new ServerTransferChatMessageHandler( (ServerTransferChatMessage) message, connFrom, applier );
+                break;
             default:
                 break;
         }

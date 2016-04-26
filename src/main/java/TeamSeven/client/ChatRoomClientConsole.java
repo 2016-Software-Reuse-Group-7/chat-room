@@ -5,7 +5,9 @@ import TeamSeven.client.socket.ChatRoomClientSocketImpl;
 import TeamSeven.common.entity.Account;
 import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
+import TeamSeven.common.message.client.ClientChatMessage;
 import TeamSeven.common.message.client.ClientLoginMessage;
+import TeamSeven.common.message.server.ServerRespLoginSuccessMessage;
 import TeamSeven.dispatcher.ConsoleClientSideMessageDispatcher;
 import TeamSeven.dispatcher.MessageDispatcher;
 import TeamSeven.util.encrypt.AsymmertricCoder;
@@ -182,6 +184,10 @@ public class ChatRoomClientConsole {
         return this.clientSocket;
     }
 
+    public void consoleAppendLine(String prefix, String line) {
+        System.out.println("[" + prefix + "] " + line);
+    }
+
     public Account UserEnterAccount() {
         System.out.println("服务器请求登录.");
         BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
@@ -202,4 +208,41 @@ public class ChatRoomClientConsole {
         return null;
     }
 
+    public void startChat() {
+        InputThread th = new InputThread(this);
+        ( new Thread(th) ).start();
+    }
+}
+
+class InputThread implements Runnable {
+
+    private ChatRoomClientConsole clientConsole;
+
+    public InputThread(ChatRoomClientConsole applier) {
+        this.clientConsole = applier;
+    }
+
+    public void run() {
+        while (true) {
+            BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
+            String chatContent = null;
+            try {
+                chatContent = sysin.readLine();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (chatContent.equals("exit")) {
+                clientConsole.clientSocket.close();
+                break;
+            }
+            else {
+                ClientChatMessage chatMessage = new ClientChatMessage(chatContent);
+                clientConsole.sendMessageWithEncryption(chatMessage);
+                clientConsole.selfDispatch(new ServerRespLoginSuccessMessage());
+                break;
+            }
+        }
+        return;
+    }
 }

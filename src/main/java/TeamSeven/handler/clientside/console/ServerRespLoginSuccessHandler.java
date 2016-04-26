@@ -25,22 +25,6 @@ public class ServerRespLoginSuccessHandler extends BaseHandler {
 
     @Override
     public void onHandle() {
-        try {
-            while (true) {
-                BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
-                String chatContent = sysin.readLine();
-
-                if (chatContent.equals("exit")) {
-                    // TODO: 退出
-                }
-                else {
-                    ClientChatMessage chatMessage = new ClientChatMessage(chatContent);
-                    this.clientConsole.sendMessageWithEncryption(chatMessage);
-                }
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.clientConsole.startChat();
     }
 }

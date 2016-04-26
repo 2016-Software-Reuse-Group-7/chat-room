@@ -26,6 +26,7 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.security.*;
+import java.util.Collection;
 
 /**
  * Created by joshoy on 16/4/17.
@@ -230,4 +231,16 @@ public class ChatRoomServerConsole {
         return this.accountManager;
     }
 
+    /**
+     * 向当前所有的connection发送消息
+     * @param message
+     */
+    public void sendMessageToAll(BaseMessage message) {
+        Collection<WebSocket> con = this.ss.connections();
+        synchronized (con) {
+            for (WebSocket c : con) {
+                this.sendMessageToClient(c, message);
+            }
+        }
+    }
 }
