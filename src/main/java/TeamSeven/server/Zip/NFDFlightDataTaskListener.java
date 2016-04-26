@@ -1,4 +1,4 @@
-package zip;
+package Zip;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
