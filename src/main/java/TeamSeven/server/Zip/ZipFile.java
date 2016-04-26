@@ -18,7 +18,7 @@ import javax.servlet.ServletContextListener;
 public class ZipFile {
 	  public static void ZipFile(String filepath ,String zippath) {
 	        try {
-	            File file = new File(filepath);// 要被压缩的文件夹
+	            File file = new File(filepath);
 	            File zipFile = new File(zippath);
 	            InputStream input = null;
 	            ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
