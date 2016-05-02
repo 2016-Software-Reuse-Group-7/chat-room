@@ -2,13 +2,11 @@ package TeamSeven.dispatcher;
 
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientChatMessage;
+import TeamSeven.common.message.client.ClientGroupChatMessage;
 import TeamSeven.common.message.client.ClientLoginMessage;
 import TeamSeven.common.message.client.ClientRespEncryptTypeMessage;
 import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
-import TeamSeven.handler.serverside.console.ClientChatHandler;
-import TeamSeven.handler.serverside.console.ClientLoginHandler;
-import TeamSeven.handler.serverside.console.ClientRespEncryptTypeHandler;
-import TeamSeven.handler.serverside.console.ServerAskEncryptTypeHandler;
+import TeamSeven.handler.serverside.console.*;
 import org.java_websocket.WebSocket;
 
 /**
@@ -38,6 +36,11 @@ public class ConsoleServerSideMessageDispatcher extends MessageDispatcher {
             case CLIENT_LOGIN:
                 handler = new ClientLoginHandler( (ClientLoginMessage) message, conn, applier );
                 break;
+            /**
+             *  服务器分发  群组聊天的 信息
+             */
+            case CLIENT_GROUP_CHAT:
+                handler = new ClientGroupChatHandler((ClientGroupChatMessage) message,conn,applier);
             default:
                 break;
         }

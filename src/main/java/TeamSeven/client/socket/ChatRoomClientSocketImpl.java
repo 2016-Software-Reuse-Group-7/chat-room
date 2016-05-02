@@ -60,8 +60,6 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
             e.printStackTrace();
             System.err.println("反序列化失败");
         }
-
-
     }
 
     @Override
