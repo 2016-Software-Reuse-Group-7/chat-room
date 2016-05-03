@@ -286,6 +286,19 @@ public class ChatRoomServerConsole {
     }
 
     /**
+     * 向某个 群组 发送信息
+     * @param baseMessage
+     */
+    public void sendMessageToGroup(BaseMessage baseMessage){
+        Collection<WebSocket> con = this.ss.connections();
+        synchronized (con) {
+            for(WebSocket c : con) {
+                this.sendMessageToClient(c,baseMessage);
+            }
+        }
+    }
+
+    /**
      * 获取 server performance manager
      * @return
      */

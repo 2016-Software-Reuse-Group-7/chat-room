@@ -14,6 +14,7 @@ public enum TransMessageTypeEnum {
     CLIENT_PUBKEY,
     CLIENT_ACT_START_CONNECTION,
     CLIENT_RESP_ENCRYPT_TYPE,
+    CLIENT_GROUP_CHAT,
     // 服务端产生的消息类型
     SERVER_ACK,
     SERVER_BOARDCAST,
@@ -24,5 +25,6 @@ public enum TransMessageTypeEnum {
     SERVER_RESP_LOGIN_SUCCESS,
     SERVER_RESP_LOGIN_FAILED,
     SERVER_TRANSFER_CHAT,
+    SERVER_GROUP_CHAT,
     // TODO: add more
 }

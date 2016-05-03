@@ -6,6 +6,7 @@ import TeamSeven.common.enumerate.AccountVerifyResultEnum;
 import org.java_websocket.WebSocket;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,4 +27,11 @@ public abstract class AccountManager {
     public abstract AccountVerifyResultEnum verifyAccount(Account account);
 
     public abstract Account getAccountBySession(Session session);
+
+    /**
+     * 通过群组ID 获取当前群组的AccountList
+     * @param groupId
+     * @return
+     */
+    public abstract List<Account> getAccountByGroupId(Long groupId);
 }
