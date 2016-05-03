@@ -20,48 +20,29 @@ public class PerformanceManagerTest
     PerformanceManagerImpl pm = null;
     @Before
     public void setUp() throws Exception {
-        pm = new PerformanceManagerImpl();
-        pm.initClientPm( "oneClient" );
 
+        pm = new PerformanceManagerImpl( "oneClient" );
     }
 
     @Test
-    public void clientAddMessage() throws Exception
-    {
-        pm.clientAddMessage( "testing.." );
-        pm.clientAddMessage( "testing.." );
+    public void clientAddMessage() throws Exception {
+
+        pm.clientAddMessage();
+        pm.clientAddMessage();
         assertEquals( pm.mc.getSendMessageCount(), 2 );
-        String path = pm.getMessageFilePath();
 
-        File file = new File( path );
-        BufferedReader reader = null;
-
-        try {
-            System.out.println( path );
-            reader = new BufferedReader( new FileReader( file ) );
-            String tempString = null;
-            int line = 1;
-            while ((tempString = reader.readLine()) != null) {
-                System.out.println("line " + line + ": " + tempString);
-                line++;
-            }
-            reader.close();
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
-        pm.doCompass();
     }
 
     @Test
-    public void addReceivedMessage() throws Exception
-    {
+    public void addReceivedMessage() throws Exception {
+
         pm.addReceivedMessage();
         assertEquals( pm.mc.getReceivedMessageCount(), 1 );
     }
 
     @Test
-    public void addIgnoredMessage() throws Exception
-    {
+    public void addIgnoredMessage() throws Exception {
+
         pm.addIgnoredMessage();
         assertEquals( pm.mc.getIgnoredMessageCount(), 1 );
 
