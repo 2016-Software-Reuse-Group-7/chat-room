@@ -65,11 +65,11 @@ git clone https://github.com/2016-Software-Reuse-Group-7/chat-room.git && cd cha
 - TODO: 架构可复用
 
 ### 第二次讨论课内容
-- [欧阳俊鹏]()
-- [侯潇雪]()
-- [林悦锵]()
+- [欧阳俊鹏 未补充]()
+- [侯潇雪 未补充]()
+- [林悦锵 未补充]()
 - [赵明阳](https://github.com/DDMing/SoftwareReuseDiscuss/blob/master/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%AE%A8%E8%AE%BA%E8%AF%BE%E5%86%85%E5%AE%B9.md)
-- [陈宏俊]()
+- [陈宏俊 未补充]()
 
 
 [1]: https://github.com/JoshOY
