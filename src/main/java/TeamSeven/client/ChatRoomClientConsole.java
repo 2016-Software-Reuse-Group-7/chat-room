@@ -18,6 +18,8 @@ import TeamSeven.util.performace.PerformanceManager;
 import TeamSeven.util.performace.PerformanceManagerImpl;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
+import TeamSeven.util.zip.ZipManager;
+import TeamSeven.util.zip.ZipManagerImpl;
 import org.java_websocket.WebSocket;
 
 import javax.crypto.BadPaddingException;
@@ -55,6 +57,8 @@ public class ChatRoomClientConsole {
     protected MessageDispatcher dispatcher;
     /* performance manager */
     protected PerformanceManager performanceManager;
+    /* zip manager */
+    protected ZipManager zipManager;
     /* 配置管理 */
     protected ConfigManager configManager;
 
@@ -82,9 +86,11 @@ public class ChatRoomClientConsole {
 
         /* 初始化 performace manager */
         try {
-            this.performanceManager = new PerformanceManagerImpl();
-            this.performanceManager.initClientPm("client@" + (new Date()).toString() );
+            this.performanceManager = new PerformanceManagerImpl("client@" + (new Date()).toString());
+            this.zipManager = new ZipManagerImpl("client@" + (new Date()).toString());
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -286,7 +292,7 @@ class InputThread implements Runnable {
                 clientConsole.sendMessageWithEncryption(chatMessage);
                 /* Performance manager */
                 try {
-                    clientConsole.getPerformanceManager().clientAddMessage(chatContent);
+                    clientConsole.getPerformanceManager().clientAddMessage();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -18,7 +18,6 @@ public class MessageRecorderImplTest {
     @Test
     public void writeMessage() throws Exception {
 
-
         MessageRecorder clientMR = new MessageRecorderImpl( "oneClient" );
 
         clientMR.writeMessage( "testing..." );
@@ -43,5 +42,26 @@ public class MessageRecorderImplTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void getMessageFolderNameAndFileName() throws Exception {
+
+        MessageRecorder clientMR = new MessageRecorderImpl( "oneClient" );
+        System.out.println( "file path: " + clientMR.getMessageFilePath() );
+        System.out.println( "folder path: " + clientMR.getMessageFolderName() );
+
+    }
+
+    @Test
+    public void testNewFile() throws Exception {
+
+        MessageRecorder clientMR = new MessageRecorderImpl( "oneClient" );
+        System.out.println( "current file path: " + clientMR.getMessageFilePath() );
+        Thread.sleep(1000);
+        clientMR.newMessageFile();
+        System.out.println( "new file path: " + clientMR.getMessageFilePath() );
+
+    }
+
 
 }

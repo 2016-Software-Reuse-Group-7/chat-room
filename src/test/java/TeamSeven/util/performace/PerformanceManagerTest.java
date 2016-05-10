@@ -48,4 +48,13 @@ public class PerformanceManagerTest
 
     }
 
+    @Test
+    public void testSet() throws Exception {
+
+        pm.log.setDelay( 100 );
+        pm.log.setInterval( 1000 );
+
+    }
+
+
 }

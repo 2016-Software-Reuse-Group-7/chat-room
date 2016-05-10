@@ -17,8 +17,8 @@ import java.util.TimerTask;
 /**
  * Created by joshoy on 16/4/17.
  */
-public class PerformanceManagerImpl implements PerformanceManager
-{
+public class PerformanceManagerImpl implements PerformanceManager {
+
     public Log log;
     public MessageCount mc;
 
@@ -32,8 +32,10 @@ public class PerformanceManagerImpl implements PerformanceManager
         mc = new MessageCount( true );
 
         this.configManager = new ConfigManagerImpl( "demoServerConfig" );
-        this.filePath = this.configManager.getString( "log.performanceLogPath" );
-        log.setPMDir(filePath);
+        this.filePath = this.configManager.getString( "log.performance.outPath" );
+        log.setPMDir( filePath );
+        log.setDelay( this.configManager.getLong( "log.performance.logDelay" ) );
+        log.setInterval( this.configManager.getLong( "log.performance.logPeriod" ) );
 
         startLog();
     }
@@ -46,6 +48,8 @@ public class PerformanceManagerImpl implements PerformanceManager
         this.configManager = new ConfigManagerImpl( "demoClientConfig" );
         this.filePath = this.configManager.getString( "log.performanceLogPath" ) + name + "/";
         log.setPMDir(filePath);
+        log.setDelay( this.configManager.getLong( "log.performance.logDelay" ) );
+        log.setInterval( this.configManager.getLong( "log.performance.logPeriod" ) );
 
         startLog();
     }
@@ -74,7 +78,6 @@ public class PerformanceManagerImpl implements PerformanceManager
     // 开始生成文件
     public void startLog() throws IOException {
 
-        log.setDelay( 0 );
         log.run();
     }
 
