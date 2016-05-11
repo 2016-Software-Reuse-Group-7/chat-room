@@ -33,6 +33,8 @@ public abstract class ConfigManager {
 
     public abstract boolean getBoolean(String configKey);
 
+    public abstract long getLong(String configKey);
+
     public abstract ConfigManager setConfigValue(String configKey, String configValue);
 
     public abstract ConfigManager setConfigValue(String configKey, int configValue);

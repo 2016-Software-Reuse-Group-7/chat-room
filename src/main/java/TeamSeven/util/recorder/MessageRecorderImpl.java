@@ -20,7 +20,7 @@ public class MessageRecorderImpl implements MessageRecorder {
     public MessageRecorderImpl() {
 
         this.configManager = new ConfigManagerImpl( "demoServerConfig" );
-        this.messageFilePath = this.configManager.getString( "log.outPath" );
+        this.messageFilePath = this.configManager.getString( "log.messages.outPath" );
 
         newMessageFile();
 
@@ -29,7 +29,7 @@ public class MessageRecorderImpl implements MessageRecorder {
     public MessageRecorderImpl( String clientName ) {
 
         this.configManager = new ConfigManagerImpl( "demoClientConfig" );
-        this.messageFilePath = this.configManager.getString( "log.outPath" ) + clientName + "/";
+        this.messageFilePath = this.configManager.getString( "log.messages.outPath" ) + clientName + "/";
 
         newMessageFile();
 
@@ -57,5 +57,9 @@ public class MessageRecorderImpl implements MessageRecorder {
     public String getMessageFilePath()
     {
         return messageFilePath + messageFileName + ".txt";
+    }
+
+    public String getMessageFolderName() {
+        return messageFilePath;
     }
 }

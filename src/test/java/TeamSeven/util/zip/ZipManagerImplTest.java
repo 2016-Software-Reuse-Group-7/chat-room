@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,20 @@ public class ZipManagerImplTest {
             zipManager.doWeeklyCompass( zipFileList );
 
         }
+    }
+
+    @Test
+    public void testSet() throws Exception {
+
+        ZipManagerImpl zipManager = new ZipManagerImpl();
+        System.out.println( zipManager.getZipTime() );
+        zipManager.setZipTime( 4 );
+        System.out.println( zipManager.getZipTime() );
+
+        System.out.println( zipManager.getWeeklyZipTime() );
+        zipManager.setWeeklyZipTime( 1, 5 );
+        System.out.println( zipManager.getWeeklyZipTime() );
+
 
     }
 }

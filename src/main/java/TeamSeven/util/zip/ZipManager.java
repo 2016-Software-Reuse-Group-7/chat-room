@@ -29,13 +29,6 @@ public interface ZipManager {
 	void decompress( File destFile, ZipInputStream zis ) throws Exception;
 	void fileProber( File dirFile);
 
-	// 删除文件
-	boolean delete( String fileName );
-	boolean deleteFile( String fileName );
-	boolean deleteDirectory( String dir );
-
-
-
 }
 
 

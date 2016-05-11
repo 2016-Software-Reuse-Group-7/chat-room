@@ -23,6 +23,8 @@ import TeamSeven.util.performace.PerformanceManager;
 import TeamSeven.util.performace.PerformanceManagerImpl;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
+import TeamSeven.util.zip.ZipManager;
+import TeamSeven.util.zip.ZipManagerImpl;
 import org.java_websocket.WebSocket;
 
 import javax.crypto.BadPaddingException;
@@ -72,6 +74,10 @@ public class ChatRoomServerConsole {
     * Performance Manager
     * */
     protected PerformanceManager performanceManager;
+    /*
+    * zip Manager
+    * */
+    protected ZipManager zipManager;
 
     /**
      * 序列化工具
@@ -102,13 +108,16 @@ public class ChatRoomServerConsole {
             exit(0);
         }
 
-        /* 初始化 Performance Manager */
-        this.performanceManager = new PerformanceManagerImpl();
+        /* 初始化 Performance Manager 和 Zip Manager */
         try {
-            this.performanceManager.initServerPm();
+            this.performanceManager = new PerformanceManagerImpl();
+            this.zipManager = new ZipManagerImpl();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
         try {
             KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");

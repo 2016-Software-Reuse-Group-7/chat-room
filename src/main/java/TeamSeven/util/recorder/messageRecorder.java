@@ -11,4 +11,6 @@ public interface MessageRecorder {
     void writeMessage( String content ) throws Exception;
 
     String getMessageFilePath();
+    String getMessageFolderName();
+
 }

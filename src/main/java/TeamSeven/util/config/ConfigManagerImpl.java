@@ -69,6 +69,15 @@ public class ConfigManagerImpl extends ConfigManager {
         return this.conf.getBoolean(configKey);
     }
 
+    /**
+     * @param configKey 配置键
+     * @return 对应配置键的boolean值
+     */
+    @Override
+    public long getLong(String configKey) {
+        return this.conf.getLong(configKey);
+    }
+
 
     /**
      * @param configKey 配置键
