@@ -36,6 +36,7 @@ public class ConsoleServerSideMessageDispatcher extends MessageDispatcher {
             case CLIENT_LOGIN:
                 handler = new ClientLoginHandler( (ClientLoginMessage) message, conn, applier );
                 break;
+
             /**
              *  服务器分发  群组聊天的 信息
              */

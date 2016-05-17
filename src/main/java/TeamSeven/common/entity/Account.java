@@ -9,10 +9,12 @@ public final class Account implements Serializable {
 
     private String userId;     // 用户ID
     private String password;   // 密码
+    private Boolean status;   //登陆状态
 
     public Account(String userId, String password) {
         this.userId = userId;
         this.password = password;
+        this.status = false;
     }
 
     public Account(Account account) {
@@ -45,5 +47,13 @@ public final class Account implements Serializable {
         else {
             return false;
         }
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

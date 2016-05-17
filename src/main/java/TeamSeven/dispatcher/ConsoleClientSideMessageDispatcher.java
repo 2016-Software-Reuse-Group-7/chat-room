@@ -4,6 +4,7 @@ import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.client.ClientActionStartConnectionMessage;
 import TeamSeven.common.message.server.*;
 import TeamSeven.handler.clientside.console.*;
+import TeamSeven.handler.clientside.console.ServerGroupLoginHandler;
 import org.java_websocket.WebSocket;
 
 /**
@@ -45,6 +46,8 @@ public class ConsoleClientSideMessageDispatcher extends MessageDispatcher {
             case SERVER_TRANSFER_CHAT:
                 handler = new ServerTransferChatMessageHandler( (ServerTransferChatMessage) message, connFrom, applier );
                 break;
+            case LOGIN_STATUS:
+                handler = new ServerGroupLoginHandler( (GroupMemberLoginMessage) message, connFrom , applier );
             default:
                 break;
         }
