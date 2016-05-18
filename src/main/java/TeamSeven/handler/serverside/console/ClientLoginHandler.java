@@ -1,6 +1,7 @@
 package TeamSeven.handler.serverside.console;
 
 import TeamSeven.common.message.client.ClientLoginMessage;
+import TeamSeven.common.message.server.GroupMemberLoginMessage;
 import TeamSeven.common.message.server.ServerRespLoginFailedMessage;
 import TeamSeven.common.message.server.ServerRespLoginSuccessMessage;
 import TeamSeven.handler.BaseHandler;
@@ -24,8 +25,16 @@ public class ClientLoginHandler extends BaseHandler {
     @Override
     public void onHandle() {
         boolean success = this.serverConsole.clientLogin(this.ws, message.getLoginAccount());
+        /**
+         * 更改用户的登陆状态
+         */
+        message.getLoginAccount().setStatus(true);
         if (success) {
             serverConsole.sendMessageToClient( this.ws, new ServerRespLoginSuccessMessage() );
+            /**
+             * 以前只需要将登陆成功的信息发送给登陆者  现在还需要把Member登陆成功的信息 发送给group中的成员。
+             */
+            serverConsole.sendMessageToGroup(new GroupMemberLoginMessage(message.getLoginAccount()));
         }
         else {
             serverConsole.sendMessageToClient( this.ws, new ServerRespLoginFailedMessage() );

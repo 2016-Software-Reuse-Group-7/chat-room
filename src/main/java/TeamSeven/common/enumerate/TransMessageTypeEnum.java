@@ -26,5 +26,6 @@ public enum TransMessageTypeEnum {
     SERVER_RESP_LOGIN_FAILED,
     SERVER_TRANSFER_CHAT,
     SERVER_GROUP_CHAT,
+    LOGIN_STATUS,
     // TODO: add more
 }

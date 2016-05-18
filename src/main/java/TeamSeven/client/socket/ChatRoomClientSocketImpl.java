@@ -7,12 +7,14 @@ import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
 import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.IOException;
 import java.net.URI;
 import java.security.Key;
 import java.security.PublicKey;
+import java.util.*;
 
 /**
  * Created by joshoy on 16/4/17.
@@ -24,6 +26,8 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
     protected EncryptTypeEnum encryptType;
 
     protected Key connectionKey;
+
+
 
     /**
      * @param serverUri  WebSocket Server URI
@@ -48,7 +52,6 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
 
         // 加密模块有些问题, 暂时不用了
         decryptedMsg = encryptedMsg;
-
         BaseMessage msg = null;
         try {
             msg = (BaseMessage) cs.deserializeStringifyObject(decryptedMsg);
@@ -83,4 +86,6 @@ public class ChatRoomClientSocketImpl extends ChatRoomClientSocket {
     public void setConnectionKey(Key k) {
         this.connectionKey = k;
     }
+
+
 }

@@ -35,6 +35,9 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by joshoy on 16/4/17.
@@ -66,6 +69,9 @@ public class ChatRoomClientConsole {
     protected Boolean isLogged;
     /* 账号 */
     protected Account loggedAccount;
+    // 成员列表
+    protected HashMap<String,Boolean> groupList;
+
 
     public ChatRoomClientConsole(String configFileName) {
 
@@ -74,6 +80,7 @@ public class ChatRoomClientConsole {
         this.serializeTool = new ChatRoomSerializerImpl();
         this.isLogged = false;
         this.configManager = new ConfigManagerImpl(configFileName);
+        initialGroupList();
 
         /* 初始化server uri */
         try {
@@ -256,7 +263,32 @@ public class ChatRoomClientConsole {
     public void setLoggedAccount(Account loggedAccount) {
         this.loggedAccount = loggedAccount;
     }
+    /**
+     * 初始化 好友列表
+     */
+    public void initialGroupList(){
+        HashMap<String,Boolean> groupList = new HashMap<String, Boolean>();
+        HashMap<String,Boolean> mem1 = new HashMap<String, Boolean>();
+        mem1.put("1",false);
+        mem1.put("2",false);
+        mem1.put("3",false);
+        this.groupList = groupList;
+    }
 
+    /**
+     * 是否在线的字符转化
+     */
+    public String convert(Boolean status){
+        return status ? "在线" : "离线";
+    }
+
+    public HashMap<String, Boolean> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(HashMap<String, Boolean> groupList) {
+        this.groupList = groupList;
+    }
 }
 
 class InputThread implements Runnable {
@@ -303,4 +335,5 @@ class InputThread implements Runnable {
         }
         return;
     }
+
 }

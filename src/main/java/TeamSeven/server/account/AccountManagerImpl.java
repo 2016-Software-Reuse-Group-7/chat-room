@@ -34,6 +34,7 @@ public class AccountManagerImpl extends AccountManager {
         else {
             this.loginAccountSet.add(account);
             this.accountMap.put(new Session(conn), account);
+            LoginOrLogOut(account.getUserId(),true);
             return true;
         }
     }
