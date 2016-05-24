@@ -20,6 +20,8 @@ import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 import TeamSeven.util.zip.ZipManager;
 import TeamSeven.util.zip.ZipManagerImpl;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.java_websocket.WebSocket;
 
 import javax.crypto.BadPaddingException;
@@ -43,7 +45,8 @@ import java.util.Map;
  * Created by joshoy on 16/4/17.
  */
 public class ChatRoomClientConsole {
-
+    private static Logger logger = Logger.getLogger(ChatRoomClientConsole.class);
+    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-client.properties";
     /* Server URI, TODO: 从配置文件中读取 */
     URI serverUri;
     /* 序列化工具 */
@@ -81,13 +84,16 @@ public class ChatRoomClientConsole {
         this.isLogged = false;
         this.configManager = new ConfigManagerImpl(configFileName);
         initialGroupList();
+        PropertyConfigurator.configure(p);//加载.properties文件
 
         /* 初始化server uri */
         try {
             this.serverUri = new URI(
                 "ws://" + this.configManager.getString("connection.host") + ":" + this.configManager.getInt("connection.port")
             );
+            logger.info("server uri rightly");
         } catch (URISyntaxException e) {
+            logger.error("server uri wrong");
             e.printStackTrace();
         }
 
@@ -95,9 +101,12 @@ public class ChatRoomClientConsole {
         try {
             this.performanceManager = new PerformanceManagerImpl("client@" + (new Date()).toString());
             this.zipManager = new ZipManagerImpl("client@" + (new Date()).toString());
+            logger.info("performance manager rightly");
         } catch (IOException e) {
+            logger.error("performance manager io wrong");
             e.printStackTrace();
         } catch (Exception e) {
+            logger.error("performance manager wrong");
             e.printStackTrace();
         }
 
@@ -159,14 +168,15 @@ public class ChatRoomClientConsole {
         try {
             String serializedMessage = this.serializeTool.serializeObjectAndStringify(msg);
             String sendingBuffer = null;
-
             sendingBuffer = serializedMessage;
             /* 无误后, 发送 */
             this.sendRaw(sendingBuffer);
-
+            logger.info("send2server successfully");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("发送序列化加密消息失败.");
+            logger.error("send2server wrong");
+
         }
     }
 
@@ -292,29 +302,36 @@ public class ChatRoomClientConsole {
 }
 
 class InputThread implements Runnable {
+    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-client.properties";
 
     private ChatRoomClientConsole clientConsole;
-
+    private static Logger logger = Logger.getLogger(InputThread.class);
     public InputThread(ChatRoomClientConsole applier) {
         this.clientConsole = applier;
     }
 
     public void run() {
+
+        PropertyConfigurator.configure(p);//加载.properties文件
         while (true) {
             BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
             String chatContent = null;
             try {
                 chatContent = sysin.readLine();
+                logger.info("read file right");
             }
             catch (IOException e) {
+                logger.warn("read file wrong");
                 e.printStackTrace();
             }
             if (chatContent.equals("exit")) {
                 clientConsole.clientSocket.close();
                 /* Performance manager */
                 try {
+                    logger.info("read file right");
                     clientConsole.getPerformanceManager().endLog();
                 } catch (IOException e) {
+                    logger.warn("read file wrong");
                     e.printStackTrace();
                 }
                 break;
@@ -325,7 +342,9 @@ class InputThread implements Runnable {
                 /* Performance manager */
                 try {
                     clientConsole.getPerformanceManager().clientAddMessage();
+                    logger.info("read file right");
                 } catch (Exception e) {
+                    logger.warn("read file right");
                     e.printStackTrace();
                 }
                 /* Dispatch new message to self */

@@ -7,7 +7,7 @@ public class log {
     private static Logger logger = Logger.getLogger(log.class);
 
     public log(){
-        PropertyConfigurator.configure("C:/Users/john/workspace2/file/src/log/log4j.properties");//加载.properties文件
+        PropertyConfigurator.configure("../util/log/log4j.properties");//加载.properties文件
         // System.out.println("This is println message.");
         // 记录debug级别的信息
         logger.debug("This is debug message.");

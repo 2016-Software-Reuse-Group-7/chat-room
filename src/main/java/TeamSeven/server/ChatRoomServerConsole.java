@@ -25,6 +25,8 @@ import TeamSeven.util.serialize.ChatRoomSerializer;
 import TeamSeven.util.serialize.ChatRoomSerializerImpl;
 import TeamSeven.util.zip.ZipManager;
 import TeamSeven.util.zip.ZipManagerImpl;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.java_websocket.WebSocket;
 
 import javax.crypto.BadPaddingException;
@@ -44,6 +46,8 @@ import static java.lang.System.exit;
  * Created by joshoy on 16/4/17.
  */
 public class ChatRoomServerConsole {
+    private static Logger logger = Logger.getLogger(ChatRoomServerConsole.class);
+    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-server.properties";
 
     protected int port;
     /*
@@ -93,6 +97,8 @@ public class ChatRoomServerConsole {
     protected ChatRoomServerSocket ss;
 
     public ChatRoomServerConsole(String configFileName) {
+        PropertyConfigurator.configure(p);//加载.properties文件
+
         // 创建一个Console Dispatcher
         // 将this作为applier参数传入后, 我们在自定义的handler里就可以直接调用本类提供的方法
         this.serializeTool = new ChatRoomSerializerImpl();
@@ -112,9 +118,12 @@ public class ChatRoomServerConsole {
         try {
             this.performanceManager = new PerformanceManagerImpl();
             this.zipManager = new ZipManagerImpl();
+            logger.info("初始化 Performance Manager 和 Zip Manager正确");
         } catch (IOException e) {
+            logger.info("初始化 Performance Manager 和 Zip Manager错误");
             e.printStackTrace();
         } catch (Exception e) {
+            logger.info("初始化 Performance Manager 和 Zip Manager错误");
             e.printStackTrace();
         }
 
@@ -125,7 +134,9 @@ public class ChatRoomServerConsole {
             KeyPair keyPair = keyPairGen.generateKeyPair();
             this.defaultPublicKey = keyPair.getPublic();
             this.defaultPrivateKey = keyPair.getPrivate();
+            logger.info("密钥正确");
         } catch (NoSuchAlgorithmException e) {
+            logger.info("密钥错误");
             e.printStackTrace();
         }
 
@@ -144,8 +155,10 @@ public class ChatRoomServerConsole {
             ss = new ChatRoomServerSocketImpl(port, this.dispatcher, this.sessionManager);
             System.out.println("Server WebSocket Created.");
             // 开始输入
+            logger.info("server创建成功");
             this.startInput();
         } catch (UnknownHostException e) {
+            logger.info("server创建错误");
             e.printStackTrace();
         }
     }
@@ -345,14 +358,17 @@ public class ChatRoomServerConsole {
 }
 
 class InputThread implements Runnable {
+    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-server.properties";
 
     private ChatRoomServerConsole serverConsole;
 
     public InputThread(ChatRoomServerConsole applier) {
         this.serverConsole = applier;
     }
+    private static Logger logger = Logger.getLogger(ChatRoomServerConsole.class);
 
     public void run() {
+        PropertyConfigurator.configure(p);//加载.properties文件
         while (true) {
             BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
             String chatContent = null;
@@ -364,6 +380,8 @@ class InputThread implements Runnable {
             }
             if (chatContent.equals("exit")) {
                 serverConsole.closeServer();
+                logger.info("server退出");
+
                 break;
             }
             else {
