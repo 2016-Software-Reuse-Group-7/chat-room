@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public class ChatRoomClientConsole {
     private static Logger logger = Logger.getLogger(ChatRoomClientConsole.class);
-    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-client.properties";
+    public static String p="src/main/resources/log4j-client.properties";
     /* Server URI, TODO: 从配置文件中读取 */
     URI serverUri;
     /* 序列化工具 */
@@ -302,7 +302,7 @@ public class ChatRoomClientConsole {
 }
 
 class InputThread implements Runnable {
-    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-client.properties";
+    public static String p="src/main/resources/log4j-client.properties";
 
     private ChatRoomClientConsole clientConsole;
     private static Logger logger = Logger.getLogger(InputThread.class);

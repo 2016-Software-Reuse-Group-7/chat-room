@@ -2,10 +2,13 @@ package TeamSeven.util.zip;
 
 import TeamSeven.util.performace.PerformanceManager;
 import TeamSeven.util.performace.PerformanceManagerImpl;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,5 +66,17 @@ public class ZipManagerImplTest {
         System.out.println( zipManager.getWeeklyZipTime() );
 
 
+    }
+    @Test
+    public void testZipManagerWithServerLog() throws Exception {
+
+        ZipManagerImpl zipManager = new ZipManagerImpl();
+        Logger logger = Logger.getLogger(ZipManagerImpl.class);
+        String p="src/main/resources/log4j-server.properties";
+        PropertyConfigurator.configure(p);
+        logger.info("server uri rightly");
+        logger.error("server uri wrong");
+
+        zipManager.doDailyCompass();
     }
 }
