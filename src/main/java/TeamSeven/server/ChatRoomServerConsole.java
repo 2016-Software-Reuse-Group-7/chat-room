@@ -47,7 +47,7 @@ import static java.lang.System.exit;
  */
 public class ChatRoomServerConsole {
     private static Logger logger = Logger.getLogger(ChatRoomServerConsole.class);
-    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-server.properties";
+    public static String p="src/main/resources/log4j-server.properties";
 
     protected int port;
     /*
@@ -358,7 +358,7 @@ public class ChatRoomServerConsole {
 }
 
 class InputThread implements Runnable {
-    public static String p="C:/Users/john/chat-room/src/main/resources/log4j-server.properties";
+    public static String p="src/main/resources/log4j-server.properties";
 
     private ChatRoomServerConsole serverConsole;
 

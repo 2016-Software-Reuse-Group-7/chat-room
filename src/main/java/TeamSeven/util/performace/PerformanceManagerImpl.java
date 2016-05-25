@@ -46,7 +46,7 @@ public class PerformanceManagerImpl implements PerformanceManager {
         mc = new MessageCount( false );
 
         this.configManager = new ConfigManagerImpl( "demoClientConfig" );
-        this.filePath = this.configManager.getString( "log.performanceLogPath" ) + name + "/";
+        this.filePath = this.configManager.getString( "log.performance.outPath" ) + name + "/";
         log.setPMDir(filePath);
         log.setDelay( this.configManager.getLong( "log.performance.logDelay" ) );
         log.setInterval( this.configManager.getLong( "log.performance.logPeriod" ) );

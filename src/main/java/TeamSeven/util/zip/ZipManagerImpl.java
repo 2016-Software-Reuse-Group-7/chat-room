@@ -36,6 +36,7 @@ public class ZipManagerImpl implements ZipManager {
 
     private String zipFilePath;
     private String weeklyZipFilePath;
+    private String serverLogFilePath;
 
     public String getZipFilePath() {
         return zipFilePath;
@@ -117,6 +118,8 @@ public class ZipManagerImpl implements ZipManager {
         this.configManager = new ConfigManagerImpl("demoServerConfig");
         this.zipFilePath = this.configManager.getString("log.zip.zipPath");
         this.weeklyZipFilePath = this.configManager.getString("log.zip.rezipPath");
+        this.serverLogFilePath = "logFiles/server/serverlog";
+        Log.recordFileName.add( serverLogFilePath );
 
         this.messageRecorder = new MessageRecorderImpl();
         this.sizeLimitationManager = new SizeLimitationManagerImpl(this.configManager.getInt("log.messages.singleFileSize"), this.configManager.getInt("log.messages.totalFileSize"));
@@ -130,9 +133,11 @@ public class ZipManagerImpl implements ZipManager {
         this.configManager = new ConfigManagerImpl("demoClientConfig");
         this.zipFilePath = this.configManager.getString("log.zip.zipPath") + clientName + "/";
         this.weeklyZipFilePath = this.configManager.getString("log.zip.rezipPath") + clientName + "/";
+        this.serverLogFilePath = "logFiles/client/clientlog";
+        Log.recordFileName.add( serverLogFilePath );
 
         this.messageRecorder = new MessageRecorderImpl(clientName);
-        this.sizeLimitationManager = new SizeLimitationManagerImpl(this.configManager.getInt("log.fileSizeLimitation.singleSize"), this.configManager.getInt("log.fileSizeLimitation.totalSize"));
+        this.sizeLimitationManager = new SizeLimitationManagerImpl(this.configManager.getInt("log.messages.singleFileSize"), this.configManager.getInt("log.messages.totalFileSize"));
 
         initTimer();
         startZip();
@@ -207,9 +212,13 @@ public class ZipManagerImpl implements ZipManager {
             Date dt = new Date();
             DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
             String time = df.format(dt);
+
+
+
             compress(zipFilePath + time + ".zip");
 
             messageRecorder.newMessageFile();
+            Log.recordFileName.add( serverLogFilePath );
 
         } catch (Exception e) {
             e.printStackTrace();
