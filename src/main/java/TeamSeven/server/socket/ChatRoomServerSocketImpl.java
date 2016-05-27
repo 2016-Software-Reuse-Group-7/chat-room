@@ -5,6 +5,7 @@ import TeamSeven.common.enumerate.EncryptTypeEnum;
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.server.ServerAskEncryptTypeMessage;
 import TeamSeven.dispatcher.ConsoleServerSideMessageDispatcher;
+import TeamSeven.dispatcher.MessageDispatcher;
 import TeamSeven.server.session.SessionManager;
 import TeamSeven.util.encrypt.AsymmertricCoder;
 import TeamSeven.util.encrypt.SymmetricCoder;
@@ -25,7 +26,7 @@ public class ChatRoomServerSocketImpl extends ChatRoomServerSocket {
     }
 
     public ChatRoomServerSocketImpl(int port,
-                                    ConsoleServerSideMessageDispatcher dispatcher,
+                                    MessageDispatcher dispatcher,
                                     SessionManager sessionManager) throws UnknownHostException {
         super(port, dispatcher, sessionManager);
         System.out.println("Starting server on port " + port);
