@@ -1,4 +1,4 @@
-package TeamSeven.handler.licenseServer;
+package TeamSeven.handler.receiveServer;
 
 import TeamSeven.common.message.BaseMessage;
 import TeamSeven.common.message.receiverServer.ReqLicenseServerUserLimitationMessage;
@@ -9,16 +9,16 @@ import org.java_websocket.WebSocket;
 /**
  * Created by joshoy on 16/5/27.
  */
-public class ReqLicenseServerUserLimitationHandler extends BaseHandler {
+public class receiveServerHandler extends BaseHandler {
 
-    public ReqLicenseServerUserLimitationHandler(WebSocket conn) {
+    public receiveServerHandler(WebSocket conn) {
         super(conn);
     }
 
     protected ReqLicenseServerUserLimitationMessage message;
     protected LicenseServer server;
 
-    public ReqLicenseServerUserLimitationHandler(BaseMessage msg, WebSocket conn, Object applier) {
+    public receiveServerHandler(BaseMessage msg, WebSocket conn, Object applier) {
         super(conn);
         message = (ReqLicenseServerUserLimitationMessage) msg;
         server = (LicenseServer) applier;
