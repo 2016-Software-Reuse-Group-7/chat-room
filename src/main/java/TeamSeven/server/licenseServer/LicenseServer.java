@@ -8,6 +8,7 @@ import TeamSeven.server.socket.ChatRoomServerSocket;
 import TeamSeven.server.socket.ChatRoomServerSocketImpl;
 import TeamSeven.util.config.ConfigManager;
 import TeamSeven.util.config.ConfigManagerImpl;
+import TeamSeven.util.serialize.ChatRoomSerializer;
 
 import java.net.UnknownHostException;
 
@@ -35,7 +36,5 @@ public class LicenseServer {
         }
     }
 
-    public void printLine(String s) {
-        System.out.println(s);
-    }
+
 }
