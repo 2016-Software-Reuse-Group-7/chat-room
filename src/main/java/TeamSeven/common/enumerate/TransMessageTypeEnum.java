@@ -27,6 +27,7 @@ public enum TransMessageTypeEnum {
     SERVER_TRANSFER_CHAT,
     SERVER_RECEIVE,
     SERVER_GROUP_CHAT,
+    SERVER_DELAY_CHAT,
     LOGIN_STATUS,
     // TODO: add more
     REQ_LICENSE_SERVER_USER_LIMITATION,
